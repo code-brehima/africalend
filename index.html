@@ -1,15 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendrier Africaine</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
+<html><head><base href="https://calendrier6261.com"><title>Calendrier Égyptien 6261</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
   @font-face {
     font-family: 'EgyptianHieroglyphs';
     src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+Egyptian+Hieroglyphs&display=swap');
+  }
+
+  :root {
+    --primary-color: #4158D0;
+    --secondary-color: #C850C0;
+    --tertiary-color: #FFCC70;
+    --background-color: rgba(255, 255, 255, 0.25);
+    --text-color: #333;
+    --border-radius: 20px;
+    --box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   }
 
   body, html {
@@ -17,9 +22,10 @@
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    color: #333;
+    color: var(--text-color);
     height: 100%;
     width: 100%;
+    font-size: 16px;
   }
 
   .animated-background {
@@ -29,113 +35,85 @@
     width: 100%;
     height: 100%;
     z-index: -1;
-    background: linear-gradient(45deg, #4158D0, #C850C0, #FFCC70);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--tertiary-color));
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
   }
 
   @keyframes gradientBG {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 
   .content {
     position: relative;
     z-index: 2;
     min-height: 100vh;
+    padding: 1.25rem;
+    backdrop-filter: blur(15px);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 20px;
-    backdrop-filter: blur(15px);
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
   }
 
   .container {
-    background: rgba(255, 255, 255, 0.25);
+    background: var(--background-color);
     backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    margin-top: 0;
-    overflow-y: auto;
-    box-sizing: border-box;
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    box-shadow: var(--box-shadow);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .top-blocks {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
   .date-block, .weather-block, .settings-block {
-    background: rgba(255, 255, 255, 0.25);
-    padding: 15px;
+    background: var(--background-color);
+    padding: 0.9375rem;
     border-radius: 10px;
     backdrop-filter: blur(12px);
-    height: 140px;
-    overflow: hidden;
+    flex: 1;
+    min-width: 250px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .date-block {
-    align-items: flex-start;
-    width: 33%;
-  }
-
-  .weather-block, .settings-block {
-    width: 31%;
   }
 
   .main-calendar {
-    background: rgba(255, 255, 255, 0.25);
-    padding: 20px;
+    background: var(--background-color);
+    padding: 1.25rem;
     border-radius: 15px;
     backdrop-filter: blur(12px);
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
     display: none;
   }
 
   .years-calendar {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
   .month-block {
-    background: rgba(255, 255, 255, 0.25);
-    padding: 20px;
+    background: var(--background-color);
+    padding: 1.25rem;
     border-radius: 15px;
     backdrop-filter: blur(10px);
-    width: calc(100% - 10px);
-    margin-bottom: 20px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
   }
 
   .current-month-block {
-    background: rgba(255, 255, 255, 0.25);
-    padding: 30px;
+    background: var(--background-color);
+    padding: 1.875rem;
     border-radius: 20px;
     backdrop-filter: blur(12px);
-    width: 95%;
-    margin-bottom: 25px;
+    margin-bottom: 1.5625rem;
     box-shadow: 0 6px 30px rgba(0,0,0,0.1);
   }
 
@@ -143,24 +121,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 1.875rem;
   }
 
   .current-month-name {
-    font-size: 32px;
+    font-size: 2rem;
     text-align: center;
   }
 
   .days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
+    gap: 0.3125rem;
   }
 
   .day-header {
     text-align: center;
     font-weight: bold;
-    padding: 5px;
+    padding: 0.3125rem;
     background: rgba(255, 165, 0, 0.6);
     border-radius: 5px;
     color: #fff;
@@ -169,14 +147,14 @@
   .day {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 5px;
-    padding: 5px;
+    padding: 0.3125rem;
     text-align: center;
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80px;
+    aspect-ratio: 1;
     cursor: pointer;
   }
 
@@ -227,7 +205,7 @@
   }
 
   .weather-icon {
-    font-size: 24px;
+    font-size: 1.5rem;
     animation: weatherIcon 2s infinite linear alternate;
   }
 
@@ -235,19 +213,16 @@
     font-size: 2.5em;
     font-weight: bold;
     margin: 0;
-    text-align: left;
   }
 
   .month-name {
     font-size: 2em;
     margin: 5px 0;
-    text-align: left;
   }
 
   #current-time {
     font-size: 1.8em;
     margin-top: auto;
-    text-align: left;
   }
 
   p {
@@ -255,9 +230,9 @@
   }
 
   .toggle-button {
-    background: rgba(255, 255, 255, 0.25);
+    background: var(--background-color);
     background-clip: padding-box;
-    padding: 15px 40px;
+    padding: 0.9375rem 2.5rem;
     border-radius: 15px;
     border: none;
     cursor: pointer;
@@ -287,40 +262,9 @@
     100% { transform: translateY(0); }
   }
 
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-  }
-
   .modal-content {
     background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
     border-radius: 10px;
-  }
-
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
   }
 
   #eventForm {
@@ -386,28 +330,6 @@
     margin-top: 10px;
   }
 
-  #embedModal {
-    display: none;
-    position: fixed;
-    z-index: 1001;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-  }
-
-  .embed-modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px;
-    border-radius: 10px;
-  }
-
   #embedCode {
     width: 100%;
     height: 100px;
@@ -464,6 +386,76 @@
     margin-top: 5px;
     text-align: center;
   }
+
+  @media (max-width: 768px) {
+    .content {
+      padding: 0.625rem;
+    }
+
+    .container {
+      padding: 0.9375rem;
+    }
+
+    .top-blocks {
+      flex-direction: column;
+    }
+
+    .date-block, .weather-block, .settings-block {
+      width: 100%;
+    }
+
+    .days {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .day {
+      font-size: 0.8em;
+    }
+
+    .toggle-button {
+      font-size: 1.2em;
+      padding: 0.625rem 1.25rem;
+    }
+
+    .year {
+      font-size: 2em;
+    }
+
+    .month-name {
+      font-size: 1.5em;
+    }
+
+    #current-time {
+      font-size: 1.5em;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .days {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .day {
+      font-size: 0.7em;
+    }
+
+    .toggle-button {
+      font-size: 1em;
+      padding: 0.5rem 1rem;
+    }
+
+    .year {
+      font-size: 1.8em;
+    }
+
+    .month-name {
+      font-size: 1.3em;
+    }
+
+    #current-time {
+      font-size: 1.3em;
+    }
+  }
 </style>
 </head>
 <body>
@@ -487,13 +479,13 @@
           </div>
         </div>
         <div class="settings-block">
-          <select class="theme-selector" id="themeSelector">
+          <select class="theme-selector form-select mb-2" id="themeSelector">
             <option value="default">Thème par défaut</option>
             <option value="dark">Thème sombre</option>
             <option value="light">Thème clair</option>
             <option value="hieroglyphic">Thème hiéroglyphique</option>
           </select>
-          <button class="embed-button" id="embedButton">Intégrer le calendrier</button>
+          <button class="embed-button btn btn-primary mb-2" id="embedButton">Intégrer le calendrier</button>
           <p class="contact-info">Email de contact : contact@kamacalend.com</p>
           <p class="copyright">Copyright © 2024 Kamacalend. Tous droits réservés</p>
         </div>
@@ -501,7 +493,7 @@
       <div class="current-month-block">
         <!-- Le mois en cours sera généré dynamiquement ici -->
       </div>
-      <button class="toggle-button" id="toggle-calendar">
+      <button class="toggle-button btn btn-secondary" id="toggle-calendar">
         <span class="icon">＋</span>
         <span>Voir les autres mois</span>
       </button>
@@ -513,29 +505,46 @@
     </div>
   </div>
 
-  <div id="eventModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2 id="modalTitle">Ajouter un événement</h2>
-      <form id="eventForm">
-        <input type="hidden" id="eventDate" name="eventDate">
-        <input type="text" id="eventTitle" name="eventTitle" placeholder="Titre de l'événement" required>
-        <textarea id="eventDescription" name="eventDescription" placeholder="Description de l'événement" rows="3"></textarea>
-        <button type="submit">Enregistrer</button>
-      </form>
-      <button id="deleteEvent" style="display:none;">Supprimer l'événement</button>
+  <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Ajouter un événement</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="eventForm">
+            <input type="hidden" id="eventDate" name="eventDate">
+            <div class="mb-3">
+              <input type="text" class="form-control" id="eventTitle" name="eventTitle" placeholder="Titre de l'événement" required>
+            </div>
+            <div class="mb-3">
+              <textarea class="form-control" id="eventDescription" name="eventDescription" placeholder="Description de l'événement" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </form>
+          <button id="deleteEvent" class="btn btn-danger mt-3" style="display:none;">Supprimer l'événement</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div id="embedModal" class="modal">
-    <div class="embed-modal-content">
-      <span class="close">&times;</span>
-      <h2>Code d'intégration</h2>
-      <textarea id="embedCode" readonly></textarea>
-      <button id="copyEmbedCode">Copier le code</button>
+  <div class="modal fade" id="embedModal" tabindex="-1" aria-labelledby="embedModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Code d'intégration</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <textarea id="embedCode" class="form-control mb-3" readonly></textarea>
+          <button id="copyEmbedCode" class="btn btn-primary">Copier le code</button>
+        </div>
+      </div>
     </div>
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const monthNames = [
   { name: "Djehouty", start: new Date(2023, 6, 19), end: new Date(2023, 7, 17), firstDayIndex: 4 },
@@ -705,15 +714,13 @@ toggleButton.addEventListener("click", () => {
 });
 
 // Modal management
-const modal = document.getElementById("eventModal");
-const span = document.getElementsByClassName("close")[0];
+const modal = new bootstrap.Modal(document.getElementById('eventModal'));
 const eventForm = document.getElementById("eventForm");
 const deleteEventButton = document.getElementById("deleteEvent");
 let currentDate = '';
 
 function openModal(date) {
   currentDate = date;
-  modal.style.display = "block";
   document.getElementById("eventDate").value = date;
   
   if (events[date]) {
@@ -727,16 +734,7 @@ function openModal(date) {
     document.getElementById("eventDescription").value = "";
     deleteEventButton.style.display = "none";
   }
-}
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
+  modal.show();
 }
 
 eventForm.onsubmit = function(e) {
@@ -747,7 +745,7 @@ eventForm.onsubmit = function(e) {
   events[currentDate] = { title, description };
   localStorage.setItem('events', JSON.stringify(events));
   
-  modal.style.display = "none";
+  modal.hide();
   initCalendar();
   if (mainCalendar.style.display === "block") {
     displayAllMonths();
@@ -758,7 +756,7 @@ deleteEventButton.onclick = function() {
   delete events[currentDate];
   localStorage.setItem('events', JSON.stringify(events));
   
-  modal.style.display = "none";
+  modal.hide();
   initCalendar();
   if (mainCalendar.style.display === "block") {
     displayAllMonths();
@@ -786,20 +784,15 @@ themeSelector.addEventListener('change', (e) => {
 
 // Embed functionality
 const embedButton = document.getElementById('embedButton');
-const embedModal = document.getElementById('embedModal');
+const embedModal = new bootstrap.Modal(document.getElementById('embedModal'));
 const embedCode = document.getElementById('embedCode');
 const copyEmbedCodeButton = document.getElementById('copyEmbedCode');
-const closeEmbedModal = embedModal.getElementsByClassName('close')[0];
 
 embedButton.addEventListener('click', () => {
-  const iframeCode = `<iframe src="https://calendrier6261.com/embed" width="600" height="400" frameborder="0"></iframe>`;
+  const iframeCode = `<iframe src="https://calendrier6261.com/embed" width="100%" height="600" frameborder="0" style="max-width: 800px;"></iframe>`;
   embedCode.value = iframeCode;
-  embedModal.style.display = "block";
+  embedModal.show();
 });
-
-closeEmbedModal.onclick = function() {
-  embedModal.style.display = "none";
-}
 
 copyEmbedCodeButton.addEventListener('click', () => {
   embedCode.select();
@@ -815,5 +808,23 @@ if (savedTheme) {
 }
 
 initCalendar();
+
+// Responsive adjustments
+function adjustForScreenSize() {
+  const width = window.innerWidth;
+  const daysContainers = document.querySelectorAll('.days');
+  daysContainers.forEach(container => {
+    if (width <= 480) {
+      container.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    } else if (width <= 768) {
+      container.style.gridTemplateColumns = 'repeat(4, 1fr)';
+    } else {
+      container.style.gridTemplateColumns = 'repeat(7, 1fr)';
+    }
+  });
+}
+
+window.addEventListener('resize', adjustForScreenSize);
+adjustForScreenSize(); // Initial call
 </script>
 </body></html>
