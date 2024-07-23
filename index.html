@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier Africaine</title>
+<style>
+  @font-face {
+    font-family: 'EgyptianHieroglyphs';
+    src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+Egyptian+Hieroglyphs&display=swap');
+  }
+
+  body, html {
+    font-family: 'EgyptianHieroglyphs', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    color: #333;
+    height: 100%;
+    width: 100%;
+  }
+
+  .animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(45deg, #4158D0, #C850C0, #FFCC70);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+  }
+
+  @keyframes gradientBG {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    backdrop-filter: blur(15px);
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+  }
+
+  .container {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin-top: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  .top-blocks {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 20px;
+  }
+
+  .date-block, .weather-block, .settings-block {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 15px;
+    border-radius: 10px;
+    backdrop-filter: blur(12px);
+    height: 140px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .date-block {
+    align-items: flex-start;
+    width: 33%;
+  }
+
+  .weather-block, .settings-block {
+    width: 31%;
+  }
+
+  .main-calendar {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(12px);
+    margin-bottom: 20px;
+    display: none;
+  }
+
+  .years-calendar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .month-block {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    width: calc(100% - 10px);
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .current-month-block {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    width: 95%;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.1);
+  }
+
+  .current-month-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .current-month-name {
+    font-size: 32px;
+    text-align: center;
+  }
+
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+  }
+
+  .day-header {
+    text-align: center;
+    font-weight: bold;
+    padding: 5px;
+    background: rgba(255, 165, 0, 0.6);
+    border-radius: 5px;
+    color: #fff;
+  }
+
+  .day {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    cursor: pointer;
+  }
+
+  .day:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .day.selected {
+    background: rgba(255, 215, 0, 0.6);
+    color: #fff;
+    transform: scale(1.1);
+    animation: pulse 2s infinite;
+  }
+
+  .day .egyptian-date {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  .day .egyptian-day-name {
+    font-size: 0.8em;
+    color: #444;
+  }
+
+  .day .gregorian-date {
+    font-size: 0.6em;
+    color: #666;
+  }
+
+  .day .event-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #ff4500;
+    border-radius: 50%;
+    margin-top: 2px;
+  }
+
+  @keyframes weatherIcon {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-30px); }
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  .weather-icon {
+    font-size: 24px;
+    animation: weatherIcon 2s infinite linear alternate;
+  }
+
+  .year {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin: 0;
+    text-align: left;
+  }
+
+  .month-name {
+    font-size: 2em;
+    margin: 5px 0;
+    text-align: left;
+  }
+
+  #current-time {
+    font-size: 1.8em;
+    margin-top: auto;
+    text-align: left;
+  }
+
+  p {
+    margin: 2px 0;
+  }
+
+  .toggle-button {
+    background: rgba(255, 255, 255, 0.25);
+    background-clip: padding-box;
+    padding: 15px 40px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    margin: auto;
+    backdrop-filter: blur(12px);
+  }
+
+  .toggle-button:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .toggle-button .icon {
+    font-size: 1.5em;
+    animation: plusBounce 2s infinite;
+  }
+
+  @keyframes plusBounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #eventForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #eventForm input, #eventForm textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  #eventForm button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  #eventForm button:hover {
+    background-color: #45a049;
+  }
+
+  #deleteEvent {
+    background-color: #f44336;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  #deleteEvent:hover {
+    background-color: #d32f2f;
+  }
+
+  .settings-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .theme-selector, .embed-button {
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .theme-selector:hover, .embed-button:hover {
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .embed-button {
+    margin-top: 10px;
+  }
+
+  #embedModal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .embed-modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+  }
+
+  #embedCode {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: none;
+  }
+
+  #copyEmbedCode {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  #copyEmbedCode:hover {
+    background-color: #45a049;
+  }
+
+  .weather-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .weather-block h2 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+
+  .weather-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sun-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+  }
+
+  .contact-info {
+    font-size: 0.8em;
+    margin-top: 10px;
+  }
+
+  .copyright {
+    font-size: 0.7em;
+    margin-top: 5px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+  <div class="animated-background"></div>
+  <div class="content">
+    <div class="container">
+      <div class="top-blocks">
+        <div class="date-block">
+          <p class="year" id="current-year">6261</p>
+          <p class="month-name" id="current-month-name">4 Thot, Akhet</p>
+          <p id="current-time"></p>
+        </div>
+        <div class="weather-block">
+          <h2>Météo à Louxor</h2>
+          <div class="weather-info">
+            <p>39°C <span class="weather-icon">☀️</span></p>
+          </div>
+          <div class="sun-info">
+            <p>🌅 Lever: 05:12</p>
+            <p>🌇 Coucher: 18:43</p>
+          </div>
+        </div>
+        <div class="settings-block">
+          <select class="theme-selector" id="themeSelector">
+            <option value="default">Thème par défaut</option>
+            <option value="dark">Thème sombre</option>
+            <option value="light">Thème clair</option>
+            <option value="hieroglyphic">Thème hiéroglyphique</option>
+          </select>
+          <button class="embed-button" id="embedButton">Intégrer le calendrier</button>
+          <p class="contact-info">Email de contact : contact@kamacalend.com</p>
+          <p class="copyright">Copyright © 2024 Kamacalend. Tous droits réservés</p>
+        </div>
+      </div>
+      <div class="current-month-block">
+        <!-- Le mois en cours sera généré dynamiquement ici -->
+      </div>
+      <button class="toggle-button" id="toggle-calendar">
+        <span class="icon">＋</span>
+        <span>Voir les autres mois</span>
+      </button>
+      <div class="main-calendar" id="main-calendar">
+        <div class="years-calendar" id="years-calendar">
+          <!-- Les mois restants seront générés dynamiquement ici -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="eventModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle">Ajouter un événement</h2>
+      <form id="eventForm">
+        <input type="hidden" id="eventDate" name="eventDate">
+        <input type="text" id="eventTitle" name="eventTitle" placeholder="Titre de l'événement" required>
+        <textarea id="eventDescription" name="eventDescription" placeholder="Description de l'événement" rows="3"></textarea>
+        <button type="submit">Enregistrer</button>
+      </form>
+      <button id="deleteEvent" style="display:none;">Supprimer l'événement</button>
+    </div>
+  </div>
+
+  <div id="embedModal" class="modal">
+    <div class="embed-modal-content">
+      <span class="close">&times;</span>
+      <h2>Code d'intégration</h2>
+      <textarea id="embedCode" readonly></textarea>
+      <button id="copyEmbedCode">Copier le code</button>
+    </div>
+  </div>
+
+<script>
+const monthNames = [
+  { name: "Djehouty", start: new Date(2023, 6, 19), end: new Date(2023, 7, 17), firstDayIndex: 4 },
+  { name: "Phaophi", start: new Date(2023, 7, 18), end: new Date(2023, 8, 16), firstDayIndex: 6 },
+  { name: "Hout Horo", start: new Date(2023, 8, 17), end: new Date(2023, 9, 16), firstDayIndex: 1 },
+  { name: "Khoiak", start: new Date(2023, 9, 17), end: new Date(2023, 10, 15), firstDayIndex: 3 },
+  { name: "Tybi", start: new Date(2023, 10, 16), end: new Date(2023, 11, 15), firstDayIndex: 5 },
+  { name: "Mekhir", start: new Date(2023, 11, 16), end: new Date(2024, 0, 14), firstDayIndex: 0 },
+  { name: "Phamenoth", start: new Date(2024, 0, 15), end: new Date(2024, 1, 13), firstDayIndex: 2 },
+  { name: "Rennoutet", start: new Date(2024, 1, 14), end: new Date(2024, 2, 15), firstDayIndex: 4 },
+  { name: "Pakhon", start: new Date(2024, 2, 16), end: new Date(2024, 3, 14), firstDayIndex: 6 },
+  { name: "Payni", start: new Date(2024, 3, 15), end: new Date(2024, 4, 14), firstDayIndex: 1 },
+  { name: "Epiphi", start: new Date(2024, 4, 15), end: new Date(2024, 5, 13), firstDayIndex: 3 },
+  { name: "Mésori", start: new Date(2024, 5, 14), end: new Date(2024, 6, 13), firstDayIndex: 5 }
+];
+
+const dayNames = ["Thot", "Horus", "Isis", "Osiris", "Hathor", "Kheper", "Ra"];
+
+let events = JSON.parse(localStorage.getItem('events')) || {};
+
+function getGregorianDate(egyptianYear, egyptianMonth, egyptianDay) {
+  const baseDate = monthNames[egyptianMonth].start;
+  const gregorianDate = new Date(baseDate);
+  gregorianDate.setDate(baseDate.getDate() + egyptianDay - 1);
+  return gregorianDate;
+}
+
+function renderMonth(monthIndex, containerClass, withHeaders = true) {
+  const month = monthNames[monthIndex];
+  const monthBlock = document.createElement("div");
+  monthBlock.className = containerClass ? containerClass : "month-block";
+  const monthHeader = `
+    <div class="month-header">
+      <h3 class="month-name">${month.name}</h3>
+    </div>
+  `;
+  monthBlock.innerHTML = monthHeader;
+
+  const daysContainer = document.createElement("div");
+  daysContainer.className = "days";
+
+  if (withHeaders) {
+    dayNames.forEach(day => {
+      const dayHeader = document.createElement("div");
+      dayHeader.className = "day-header";
+      dayHeader.textContent = day[0];
+      daysContainer.appendChild(dayHeader);
+    });
+  }
+
+  const firstDayIndex = month.firstDayIndex;
+  for (let i = 0; i < firstDayIndex; i++) {
+    const emptyDay = document.createElement("div");
+    emptyDay.className = "day";
+    daysContainer.appendChild(emptyDay);
+  }
+
+  for (let i = 1; i <= 30; i++) {
+    const dayElement = document.createElement("div");
+    dayElement.className = "day";
+    const gregorianDate = getGregorianDate(6261, monthIndex, i);
+    const egyptianDayName = dayNames[(i - 1 + firstDayIndex) % 7];
+    const dateKey = `6261-${monthIndex}-${i}`;
+    
+    dayElement.innerHTML = `
+      <span class="egyptian-date">${i}</span>
+      <span class="egyptian-day-name">${egyptianDayName}</span>
+      <span class="gregorian-date">${gregorianDate.getDate()} ${gregorianDate.toLocaleString("default", { month: "short" })}</span>
+      ${events[dateKey] ? '<div class="event-indicator"></div>' : ''}
+    `;
+    
+    dayElement.addEventListener('click', () => openModal(dateKey));
+    
+    if (i === 4 && monthIndex === 0) {
+      dayElement.classList.add("selected");
+      setTimeout(() => {
+        dayElement.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+      }, 500);
+    }
+    daysContainer.appendChild(dayElement);
+  }
+
+  monthBlock.appendChild(daysContainer);
+  return monthBlock;
+}
+
+function renderEpagomenalDays() {
+  const epagomenalBlock = document.createElement("div");
+  epagomenalBlock.className = "month-block";
+  const monthHeader = `
+    <div class="month-header">
+      <h3 class="month-name">Jours Épagomènes</h3>
+    </div>
+  `;
+  epagomenalBlock.innerHTML = monthHeader;
+
+  const daysContainer = document.createElement("div");
+  daysContainer.className = "days";
+
+  const baseDate = new Date(2024 - 4737, 6, 14);
+  const firstDayIndex = 0;
+
+  for (let i = 0; i < firstDayIndex; i++) {
+    const emptyDay = document.createElement("div");
+    emptyDay.className = "day";
+    daysContainer.appendChild(emptyDay);
+  }
+
+  for (let i = 1; i <= 5; i++) {
+    const dayElement = document.createElement("div");
+    dayElement.className = "day";
+    const gregorianDate = new Date(baseDate);
+    gregorianDate.setDate(baseDate.getDate() + i - 1);
+    const egyptianDayName = dayNames[(i - 1 + firstDayIndex) % 7];
+    const dateKey = `6261-epagomenal-${i}`;
+    
+    dayElement.innerHTML = `
+      <span class="egyptian-date">${i}</span>
+      <span class="egyptian-day-name">${egyptianDayName}</span>
+      <span class="gregorian-date">${gregorianDate.getDate()} ${gregorianDate.toLocaleString("default", { month: "short" })}</span>
+      ${events[dateKey] ? '<div class="event-indicator"></div>' : ''}
+    `;
+    
+    dayElement.addEventListener('click', () => openModal(dateKey));
+    
+    daysContainer.appendChild(dayElement);
+  }
+
+  epagomenalBlock.appendChild(daysContainer);
+  return epagomenalBlock;
+}
+
+function displayCurrentMonth() {
+  const calendarContainer = document.querySelector(".current-month-block");
+  calendarContainer.innerHTML = ''; // Clear previous content
+  const currentMonthBlock = renderMonth(0, "current-month-block", false);
+  calendarContainer.appendChild(currentMonthBlock);
+}
+
+function displayAllMonths() {
+  const calendarContainer = document.querySelector(".years-calendar");
+  calendarContainer.innerHTML = ''; // Clear previous content
+  for (let i = 1; i < 12; i++) {
+    const monthBlock = renderMonth(i);
+    calendarContainer.appendChild(monthBlock);
+  }
+  const epagomenalBlock = renderEpagomenalDays();
+  calendarContainer.appendChild(epagomenalBlock);
+}
+
+function initCalendar() {
+  displayCurrentMonth();
+}
+
+const toggleButton = document.getElementById("toggle-calendar");
+const mainCalendar = document.getElementById("main-calendar");
+
+toggleButton.addEventListener("click", () => {
+  if (mainCalendar.style.display === "none" || mainCalendar.style.display === "") {
+    mainCalendar.style.display = "block";
+    toggleButton.innerHTML = '<span class="icon">−</span><span>Cacher les autres mois</span>';
+    displayAllMonths();
+  } else {
+    mainCalendar.style.display = "none";
+    toggleButton.innerHTML = '<span class="icon">＋</span><span>Voir les autres mois</span>';
+  }
+});
+
+// Modal management
+const modal = document.getElementById("eventModal");
+const span = document.getElementsByClassName("close")[0];
+const eventForm = document.getElementById("eventForm");
+const deleteEventButton = document.getElementById("deleteEvent");
+let currentDate = '';
+
+function openModal(date) {
+  currentDate = date;
+  modal.style.display = "block";
+  document.getElementById("eventDate").value = date;
+  
+  if (events[date]) {
+    document.getElementById("modalTitle").textContent = "Modifier l'événement";
+    document.getElementById("eventTitle").value = events[date].title;
+    document.getElementById("eventDescription").value = events[date].description;
+    deleteEventButton.style.display = "block";
+  } else {
+    document.getElementById("modalTitle").textContent = "Ajouter un événement";
+    document.getElementById("eventTitle").value = "";
+    document.getElementById("eventDescription").value = "";
+    deleteEventButton.style.display = "none";
+  }
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+eventForm.onsubmit = function(e) {
+  e.preventDefault();
+  const title = document.getElementById("eventTitle").value;
+  const description = document.getElementById("eventDescription").value;
+  
+  events[currentDate] = { title, description };
+  localStorage.setItem('events', JSON.stringify(events));
+  
+  modal.style.display = "none";
+  initCalendar();
+  if (mainCalendar.style.display === "block") {
+    displayAllMonths();
+  }
+}
+
+deleteEventButton.onclick = function() {
+  delete events[currentDate];
+  localStorage.setItem('events', JSON.stringify(events));
+  
+  modal.style.display = "none";
+  initCalendar();
+  if (mainCalendar.style.display === "block") {
+    displayAllMonths();
+  }
+}
+
+function updateTime() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const seconds = now.getSeconds().toString().padStart(2, '0');
+  document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+setInterval(updateTime, 1000);
+updateTime(); // Initial call to display time immediately
+
+// Theme management
+const themeSelector = document.getElementById('themeSelector');
+themeSelector.addEventListener('change', (e) => {
+  const selectedTheme = e.target.value;
+  document.body.className = selectedTheme;
+  localStorage.setItem('selectedTheme', selectedTheme);
+});
+
+// Embed functionality
+const embedButton = document.getElementById('embedButton');
+const embedModal = document.getElementById('embedModal');
+const embedCode = document.getElementById('embedCode');
+const copyEmbedCodeButton = document.getElementById('copyEmbedCode');
+const closeEmbedModal = embedModal.getElementsByClassName('close')[0];
+
+embedButton.addEventListener('click', () => {
+  const iframeCode = `<iframe src="https://calendrier6261.com/embed" width="600" height="400" frameborder="0"></iframe>`;
+  embedCode.value = iframeCode;
+  embedModal.style.display = "block";
+});
+
+closeEmbedModal.onclick = function() {
+  embedModal.style.display = "none";
+}
+
+copyEmbedCodeButton.addEventListener('click', () => {
+  embedCode.select();
+  document.execCommand('copy');
+  alert('Code copié dans le presse-papiers !');
+});
+
+// Load saved theme
+const savedTheme = localStorage.getItem('selectedTheme');
+if (savedTheme) {
+  document.body.className = savedTheme;
+  themeSelector.value = savedTheme;
+}
+
+initCalendar();
+</script>
+</body></html>
