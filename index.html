@@ -1,283 +1,190 @@
 <html><head><base href="https://calendrier6261.com"><title>Calendrier Égyptien 6261</title>
 <link rel="icon" type="image/png" href="https://image.noelshack.com/fichiers/2024/30/4/1721871966-favicon-africalend.png">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  @font-face {
-    font-family: 'EgyptianHieroglyphs';
-    src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+Egyptian+Hieroglyphs&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+  :root {
+    --primary-color: #3f51b5;
+    --secondary-color: #f50057;
+    --background-color: #f5f5f5;
+    --surface-color: #ffffff;
+    --on-surface-color: #212121;
+    --on-primary-color: #ffffff;
+    --switch-off-color: #ccc;
+    --switch-on-color: #2196F3;
+  }
+
+  .dark-mode {
+    --primary-color: #7986cb;
+    --secondary-color: #ff4081;
+    --background-color: #121212;
+    --surface-color: #1e1e1e;
+    --on-surface-color: #ffffff;
+    --on-primary-color: #ffffff;
+    --switch-off-color: #555;
+    --switch-on-color: #bb86fc;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
 
   body, html {
-    font-family: 'EgyptianHieroglyphs', sans-serif;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    color: #333;
-    height: 100%;
-    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--on-surface-color);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  .animated-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: linear-gradient(45deg, #4158D0, #C850C0, #FFCC70);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-  }
-
-  @keyframes gradientBG {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-  .content {
-    position: relative;
-    z-index: 2;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+  .app-container {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
-    backdrop-filter: blur(15px);
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
   }
 
-  .container {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(15px);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    margin-top: 0;
-    overflow-y: auto;
-    box-sizing: border-box;
-  }
-
-  .top-blocks {
-    display: flex;
-    justify-content: space-between;
+  .card {
+    background-color: var(--surface-color);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     margin-bottom: 20px;
-    gap: 20px;
+    padding: 16px;
   }
 
   .date-block, .events-block {
-    background: rgba(255, 255, 255, 0.25);
-    padding: 15px;
-    border-radius: 10px;
-    backdrop-filter: blur(12px);
-    height: auto;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
   }
 
   .date-block {
-    align-items: flex-start;
-    width: 50%;
+    align-items: flex-start; /* Aligner le contenu à gauche */
   }
 
-  .events-block {
-    width: 50%;
+  .date-block img {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 16px;
+    align-self: flex-start; /* Aligner le logo à gauche */
   }
 
-  .main-calendar {
-    background: rgba(255, 255, 255, 0.25);
-    border-radius: 15px;
-    margin-bottom: 20px;
-    display: none;
+  .year {
+    font-size: 3rem; /* Augmenter la taille de l'année */
+    font-weight: 700;
+    color: var(--primary-color);
   }
 
-  .years-calendar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+  .month-name {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 8px;
   }
 
-  .month-block {
-    background: rgba(255, 255, 255, 0.25);
-    padding: 20px;
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-    width: calc(100% - 10px);
-    margin-bottom: 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  #current-time {
+    font-size: 1.5rem; /* Augmenter la taille de l'heure */
+    color: var(--secondary-color);
+  }
+
+  .events-block h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .event-list {
+    list-style-type: none;
+  }
+
+  .event-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .event-item:last-child {
+    border-bottom: none;
   }
 
   .current-month-block {
-    background: rgba(255, 255, 255, 0.25);
-    padding: 30px;
-    border-radius: 20px;
-    width: 95%;
-    margin-bottom: 25px;
-  }
-
-  .current-month-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-  }
-
-  .current-month-name {
-    font-size: 32px;
-    text-align: center;
+    overflow-x: auto;
   }
 
   .days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
+    gap: 8px;
+  }
+
+  .day-header, .day {
+    text-align: center;
+    padding: 8px;
   }
 
   .day-header {
-    text-align: center;
-    font-weight: bold;
-    padding: 5px;
-    background: rgba(255, 165, 0, 0.6);
-    border-radius: 5px;
-    color: #fff;
+    font-weight: 500;
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
+    border-radius: 4px;
   }
 
   .day {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
-    padding: 5px;
-    text-align: center;
-    transition: all 0.3s ease;
+    background-color: var(--surface-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 60px;
-    width: calc(80% - 10px);
-    aspect-ratio: 1 / 1.5;
-    cursor: pointer;
-    position: relative;
-    font-size: 0.9em;
-    margin: 0 auto;
+    justify-content: space-between;
+    height: 80px;
   }
 
   .day:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.4);
+    background-color: #e0e0e0;
   }
 
   .day .egyptian-date {
-    font-size: 1em;
-    font-weight: bold;
-  }
-
-  .day .egyptian-day-name {
-    font-size: 1em;
-    color: #444;
-    font-weight: bold;
+    font-weight: 500;
   }
 
   .day .gregorian-date {
-    font-size: 0.8em;
-    color: #666;
+    font-size: 0.8rem;
+    color: #757575;
   }
 
-  .day .event-indicator {
-    width: 6px;
-    height: 6px;
-    background-color: #ff4500;
-    border-radius: 50%;
+  .day .event-bar {
     position: absolute;
-    bottom: 2px;
-    right: 2px;
-  }
-
-  .day .holiday-indicator {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    font-size: 0.8em;
-    animation: bounce 0.6s infinite alternate;
-  }
-
-  @keyframes bounce {
-    from { transform: translateY(0); }
-    to { transform: translateY(-2px); }
-  }
-
-  .year {
-    font-size: 2.5em;
-    font-weight: bold;
-    margin: 0;
-    text-align: left;
-  }
-
-  .month-name {
-    font-size: 2em;
-    margin: 5px 0;
-    text-align: left;
-  }
-
-  #current-time {
-    font-size: 1.8em;
-    margin-top: auto;
-    text-align: left;
-  }
-
-  p {
-    margin: 2px 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: var(--secondary-color);
+    border-radius: 0 0 4px 4px;
   }
 
   .toggle-button {
-    background: rgba(255, 255, 255, 0.25);
-    background-clip: padding-box;
-    padding: 15px 40px;
-    border-radius: 15px;
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
     border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 1.4em;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    margin: auto;
-    backdrop-filter: blur(12px);
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 20px auto;
   }
 
   .toggle-button:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.8);
-  }
-
-  .toggle-button .icon {
-    font-size: 1.5em;
-    animation: plusBounce 2s infinite;
-  }
-
-  @keyframes plusBounce {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-    100% { transform: translateY(0); }
+    background-color: #303f9f;
   }
 
   .modal {
-    display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -286,16 +193,17 @@
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
+    background-color: var(--surface-color);
     padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
+    border-radius: 4px;
+    width: 90%;
     max-width: 500px;
-    border-radius: 10px;
   }
 
   .close {
@@ -303,19 +211,19 @@
     float: right;
     font-size: 28px;
     font-weight: bold;
+    cursor: pointer;
   }
 
   .close:hover,
   .close:focus {
-    color: black;
+    color: #000;
     text-decoration: none;
-    cursor: pointer;
   }
 
   #eventForm {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 16px;
   }
 
   #eventForm input, #eventForm textarea {
@@ -323,117 +231,181 @@
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    font-size: 1rem;
   }
 
   #eventForm button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
     border: none;
+    padding: 12px;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
   #eventForm button:hover {
-    background-color: #45a049;
+    background-color: #303f9f;
   }
 
   #deleteEvent {
-    background-color: #f44336;
-    color: white;
-    padding: 10px;
+    background-color: var(--secondary-color);
+    color: var(--on-primary-color);
     border: none;
+    padding: 12px;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 16px;
   }
 
   #deleteEvent:hover {
-    background-color: #d32f2f;
-  }
-
-  .events-block {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .events-block h2 {
-    margin: 0 0 10px 0;
-    font-size: 1.2em;
-  }
-
-  .event-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .event-item {
-    background: rgba(255, 255, 255, 0.1);
-    margin-bottom: 5px;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 0.9em;
+    background-color: #c51162;
   }
 
   .copyright {
-    font-size: 0.8em;
     text-align: center;
-    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #757575;
+    margin-top: 20px;
   }
 
   .integration-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
+    background-color: var(--secondary-color);
+    color: var(--on-primary-color);
     border: none;
+    padding: 12px;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
-    font-size: 0.9em;
-    text-align: center;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 16px;
+    width: 100%;
   }
 
   .integration-button:hover {
-    background-color: #45a049;
+    background-color: #c51162;
+  }
+
+  .options-container {
+    margin-top: 16px;
+  }
+
+  .option-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  /* Switch styles */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--switch-off-color);
+    transition: .4s;
+    border-radius: 34px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+
+  input:checked + .slider {
+    background-color: var(--switch-on-color);
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+
+  @media (min-width: 768px) {
+    .top-blocks {
+      display: flex;
+      gap: 20px;
+    }
+
+    .date-block, .events-block {
+      flex: 1;
+    }
   }
 </style>
 </head>
 <body>
-  <div class="animated-background"></div>
-  <div class="content">
-    <div class="container">
-      <div class="top-blocks">
-        <div class="date-block">
-          <p class="year" id="current-year">6261</p>
-          <p class="month-name" id="current-month-name">4 Thot, Akhet</p>
-          <p id="current-time"></p>
-        </div>
-        <div class="events-block">
-          <h2>Prochains événements</h2>
-          <ul class="event-list" id="upcoming-events">
-            <!-- Les événements seront ajoutés ici dynamiquement -->
-          </ul>
-          <p class="copyright">© 6261 Africalend</p>
-          <button class="integration-button" id="integration-button">Intégrer dans votre site</button>
-        </div>
+  <div class="app-container">
+    <div class="top-blocks">
+      <div class="date-block card">
+        <img src="https://image.noelshack.com/fichiers/2024/30/4/1721923362-africalend.png" alt="Africalend logo" width="200">
+        <p class="year" id="current-year">6261</p>
+        <p class="month-name" id="current-month-name">4 Thot, Akhet</p>
+        <p id="current-time"></p>
       </div>
-      <div class="current-month-block">
-        <!-- Le mois en cours sera généré dynamiquement ici -->
-      </div>
-      <button class="toggle-button" id="toggle-calendar">
-        <span class="icon">＋</span>
-        <span>Voir les autres mois</span>
-      </button>
-      <div class="main-calendar" id="main-calendar">
-        <div class="years-calendar" id="years-calendar">
-          <!-- Les mois restants seront générés dynamiquement ici -->
+      <div class="events-block card">
+        <h2>Les paramètres</h2>
+        <div class="options-container">
+          <div class="option-item">
+            <span>Afficher les dates grégoriennes</span>
+            <label class="switch">
+              <input type="checkbox" id="show-gregorian" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="option-item">
+            <span>Mode sombre</span>
+            <label class="switch">
+              <input type="checkbox" id="dark-mode">
+              <span class="slider"></span>
+            </label>
+          </div>
         </div>
+        <button class="integration-button" id="integration-button">Intégrer dans votre site</button>
       </div>
     </div>
+    <div class="current-month-block card">
+      <!-- Le mois en cours sera généré dynamiquement ici -->
+    </div>
+    <button class="toggle-button" id="toggle-calendar">
+      Voir les autres mois
+    </button>
+    <div class="main-calendar" id="main-calendar" style="display: none;">
+      <div class="years-calendar" id="years-calendar">
+        <!-- Les mois restants seront générés dynamiquement ici -->
+      </div>
+    </div>
+    <p class="copyright">© 6261 Africalend</p>
   </div>
 
-  <div id="eventModal" class="modal">
+  <div id="eventModal" class="modal" style="display: none;">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2 id="modalTitle">Ajouter un événement</h2>
@@ -502,7 +474,7 @@ function getEgyptianDate(gregorianDate) {
 function renderMonth(monthIndex, containerClass, withHeaders = true) {
   const month = monthNames[monthIndex];
   const monthBlock = document.createElement("div");
-  monthBlock.className = containerClass ? containerClass : "month-block";
+  monthBlock.className = containerClass ? containerClass : "month-block card";
   const monthHeader = `
     <div class="month-header">
       <h3 class="month-name">${month.name}</h3>
@@ -541,7 +513,7 @@ function renderMonth(monthIndex, containerClass, withHeaders = true) {
       <span class="egyptian-date">${i}</span>
       <span class="egyptian-day-name">${egyptianDayName}</span>
       <span class="gregorian-date">${gregorianDate.getDate()} ${gregorianDate.toLocaleString("default", { month: "short" })}</span>
-      ${events[dateKey] ? '<div class="event-indicator"></div>' : ''}
+      ${events[dateKey] ? '<div class="event-bar"></div>' : ''}
       ${holidays[gregorianDateString] ? '<div class="holiday-indicator">🎉</div>' : ''}
     `;
     
@@ -556,7 +528,7 @@ function renderMonth(monthIndex, containerClass, withHeaders = true) {
 
 function renderEpagomenalDays() {
   const epagomenalBlock = document.createElement("div");
-  epagomenalBlock.className = "month-block";
+  epagomenalBlock.className = "month-block card";
   const monthHeader = `
     <div class="month-header">
       <h3 class="month-name">Jours Épagomènes</h3>
@@ -589,7 +561,7 @@ function renderEpagomenalDays() {
       <span class="egyptian-date">${i}</span>
       <span class="egyptian-day-name">${egyptianDayName}</span>
       <span class="gregorian-date">${gregorianDate.getDate()} ${gregorianDate.toLocaleString("default", { month: "short" })}</span>
-      ${events[dateKey] ? '<div class="event-indicator"></div>' : ''}
+      ${events[dateKey] ? '<div class="event-bar"></div>' : ''}
       ${holidays[gregorianDateString] ? '<div class="holiday-indicator">🎉</div>' : ''}
     `;
     
@@ -622,20 +594,19 @@ function displayAllMonths() {
 
 function initCalendar() {
   displayCurrentMonth();
-  updateUpcomingEvents();
 }
 
 const toggleButton = document.getElementById("toggle-calendar");
 const mainCalendar = document.getElementById("main-calendar");
 
 toggleButton.addEventListener("click", () => {
-  if (mainCalendar.style.display === "none" || mainCalendar.style.display === "") {
+  if (mainCalendar.style.display === "none") {
     mainCalendar.style.display = "block";
-    toggleButton.innerHTML = '<span class="icon">−</span><span>Cacher les autres mois</span>';
+    toggleButton.textContent = "Cacher les autres mois";
     displayAllMonths();
   } else {
     mainCalendar.style.display = "none";
-    toggleButton.innerHTML = '<span class="icon">＋</span><span>Voir les autres mois</span>';
+    toggleButton.textContent = "Voir les autres mois";
   }
 });
 
@@ -724,34 +695,25 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime(); // Initial call to display time immediately
 
-function updateUpcomingEvents() {
-  const eventList = document.getElementById('upcoming-events');
-  eventList.innerHTML = ''; // Clear existing events
-
-  const now = new Date();
-  const upcomingEvents = Object.entries(events)
-    .map(([date, event]) => {
-      const [year, month, day] = date.split('-').map(Number);
-      const eventDate = getGregorianDate(year, month, day);
-      return { ...event, date: eventDate, egyptianDate: date };
-    })
-    .filter(event => event.date >= now)
-    .sort((a, b) => a.date - b.date)
-    .slice(0, 5);
-
-  upcomingEvents.forEach(event => {
-    const li = document.createElement('li');
-    li.className = 'event-item';
-    const egyptianDate = getEgyptianDate(event.date);
-    li.textContent = `${egyptianDate.day} ${monthNames[egyptianDate.month].name} (${event.date.toLocaleDateString()}) - ${event.title}`;
-    eventList.appendChild(li);
-  });
-}
-
 // Integration button functionality
 document.getElementById('integration-button').addEventListener('click', function() {
   const integrationCode = `<iframe src="https://calendrier6261.com" width="100%" height="600" frameborder="0"></iframe>`;
   alert("Voici le code pour intégrer le calendrier dans votre site :\n\n" + integrationCode);
+});
+
+// Gestion des options
+const showGregorianSwitch = document.getElementById('show-gregorian');
+const darkModeSwitch = document.getElementById('dark-mode');
+
+showGregorianSwitch.addEventListener('change', function() {
+  const gregorianDates = document.querySelectorAll('.gregorian-date');
+  gregorianDates.forEach(date => {
+    date.style.display = this.checked ? 'block' : 'none';
+  });
+});
+
+darkModeSwitch.addEventListener('change', function() {
+  document.body.classList.toggle('dark-mode', this.checked);
 });
 
 initCalendar();
