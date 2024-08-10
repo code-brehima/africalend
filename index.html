@@ -56,7 +56,6 @@
   <link rel="icon" href="https://image.noelshack.com/fichiers/2024/31/5/1722561805-icon.png" type="image/x-icon">
   <meta name="robots" content="index, follow">
 <style>
-
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
   :root {
@@ -147,13 +146,6 @@
     margin-right: 20px;
   }
 
-  .beta-tag {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--secondary-color);
-    margin-top: 5px;
-  }
-
   .year {
     font-size: 2.5rem;
     font-weight: 700;
@@ -163,7 +155,7 @@
   .seasons-title {
     font-size: 1.2rem;
     font-weight: 500;
-    margin-bottom: 4px;  /* Reduced from 8px to 4px */
+    margin-bottom: 4px;
     color: var(--primary-color);
   }
 
@@ -171,7 +163,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-top: 4px;  /* Reduced from 10px to 4px */
+    margin-top: 4px;
   }
 
   .season-block {
@@ -596,22 +588,25 @@
       height: 55px;
     }
   }
+
+  /* Nouveau style pour le block d'informations supplémentaires */
+  .info-additional {
+    background-color: #FFF6E0;
+  }
 </style>
 </head>
 <body>
 
-   <!-- Google Tag Manager (noscript) -->
+    <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N28VVQ5V"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
-
-
+   
   <div class="app-container">
     <div class="top-blocks">
       <div class="date-block card">
         <div class="logo-year-container">
           <div class="logo-container">
-            <span class="beta-tag">version Bêta</span>
             <img src="https://image.noelshack.com/fichiers/2024/30/7/1722202010-africalend-logo.png" alt="Africalend logo" width="180">
           </div>
           <p class="year" id="current-year">6261</p>
@@ -660,6 +655,10 @@
 
     <div class="current-month-block card">
       <!-- Le mois en cours sera généré dynamiquement ici -->
+    </div>
+
+    <div class="card info-additional">
+      <img src="https://image.noelshack.com/fichiers/2024/32/6/1723301425-pub-calend.png" alt="Publicité Calendrier" style="width: 100%; height: auto;">
     </div>
 
     <div class="days-block card">
@@ -918,32 +917,41 @@ function openModal(date, gregorianDate) {
     document.getElementById("eventTitle").value = events[date].title;
     document.getElementById("eventDescription").value = events[date].description;
     deleteEventButton.style.display = "block";
-  } else if (holidays[gregorianDate]) {
-    document.getElementById("modalTitle").textContent = "Jour férié";
-    document.getElementById("eventTitle").value = holidays[gregorianDate];
-    document.getElementById("eventDescription").value = "";
-    document.getElementById("eventTitle").readOnly = true;
-    document.getElementById("eventDescription").readOnly = true;
-    deleteEventButton.style.display = "none";
   } else {
-    document.getElementById("modal").textContent = "Ajouter un événement";
+    document.getElementById("modalTitle").textContent = "Ajouter un événement";
     document.getElementById("eventTitle").value = "";
-    document.getElementById("eventDescription").value =
-    "";
-    document.getElementById("eventTitle").readOnly = false;
-    document.getElementById("eventDescription").readOnly = false;
+    document.getElementById("eventDescription").value = "";
     deleteEventButton.style.display = "none";
+  }
+  
+  if (holidays[gregorianDate]) {
+    const holidayTitle = document.createElement("h3");
+    holidayTitle.textContent = "Jour férié";
+    const holidayDescription = document.createElement("p");
+    holidayDescription.textContent = holidays[gregorianDate];
+    const modalContent = document.querySelector(".modal-content");
+    modalContent.insertBefore(holidayDescription, eventForm);
+    modalContent.insertBefore(holidayTitle, holidayDescription);
   }
 }
 
 span.onclick = function() {
   modal.style.display = "none";
+  removeHolidayInfo();
 }
 
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
+    removeHolidayInfo();
   }
+}
+
+function removeHolidayInfo() {
+  const holidayTitle = document.querySelector(".modal-content h3");
+  const holidayDescription = document.querySelector(".modal-content p");
+  if (holidayTitle) holidayTitle.remove();
+  if (holidayDescription) holidayDescription.remove();
 }
 
 eventForm.onsubmit = function(e) {
@@ -954,6 +962,7 @@ eventForm.onsubmit = function(e) {
   localStorage.setItem('events', JSON.stringify(events));
   modal.style.display = "none";
   displayCurrentMonth();
+  removeHolidayInfo();
 }
 
 deleteEventButton.onclick = function() {
@@ -961,6 +970,7 @@ deleteEventButton.onclick = function() {
   localStorage.setItem('events', JSON.stringify(events));
   modal.style.display = "none";
   displayCurrentMonth();
+  removeHolidayInfo();
 }
 
 // Dark mode toggle
@@ -985,9 +995,8 @@ gregorianDatesToggle.addEventListener('change', function() {
 
 function updateGregorianDatesVisibility() {
   const gregorianDates = document.querySelectorAll('.gregorian-date');
-  gregorianDates.forEach(date => {
-    date.style.display = gregorianDatesToggle.checked ? 'block' : 'none';
-  });
+  const displayStyle = gregorianDatesToggle.checked ? 'block' : 'none';
+  gregorianDates.forEach(date => date.style.display = displayStyle);
 }
 
 // Check for saved Gregorian dates visibility preference
@@ -1000,14 +1009,13 @@ if (localStorage.getItem('showGregorianDates') === 'false') {
 const integrationButton = document.getElementById('integration-button');
 integrationButton.addEventListener('click', function() {
   const integrationCode = `<iframe src="https://calendrier6261.com" width="100%" height="600" frameborder="0"></iframe>`;
-  navigator.clipboard.writeText(integrationCode).then(function() {
-    alert('Code d\'intégration copié dans le presse-papiers !');
-  }, function(err) {
-    console.error('Erreur lors de la copie du code d\'intégration : ', err);
+  navigator.clipboard.writeText(integrationCode).then(() => {
+    alert('Code d\'intégration copié dans le presse-papier !');
+  }).catch(err => {
+    console.error('Erreur lors de la copie du code d\'intégration: ', err);
   });
 });
 
 initCalendar();
 </script>
-</body>
-</html>
+</body></html>
