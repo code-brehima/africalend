@@ -88,6 +88,12 @@
     --chemou-color: #fff176;
   }
 
+  @keyframes click-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
   * {
     box-sizing: border-box;
     margin: 0;
@@ -109,12 +115,29 @@
     padding: 10px;
   }
 
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
   .card {
     background-color: var(--surface-color);
     border-radius: 10px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     margin-bottom: 20px;
     padding: 12px;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
 
   .date-block, .events-block, .days-block {
@@ -176,6 +199,11 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .season-block:hover {
+    transform: scale(1.05);
   }
 
   .season-name {
@@ -221,13 +249,19 @@
     margin-bottom: 8px;
   }
 
-  .event-list {
-    list-style-type: none;
+  .event-list-item {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid var(--separator-color);
+    transition: background-color 0.3s ease;
   }
 
-  .event-item {
-    padding: 6px 0;
-    border-bottom: 1px solid #e0e0e0;
+  .event-list-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .event-item.holiday {
+    background-color: #ffe0e0;
   }
 
   .event-item:last-child {
@@ -297,7 +331,8 @@
   }
 
   .day:hover {
-    background-color: #e0e0e0;
+    transform: scale(1.1);
+    z-index: 1;
   }
 
   .day .egyptian-date {
@@ -317,6 +352,23 @@
     height: 3px;
     background-color: var(--secondary-color);
     border-radius: 0 0 10px 10px;
+  }
+
+  .epagomenal-day {
+    background-color: #FFD700;
+    color: #000;
+    font-weight: bold;
+    border: 2px solid #FFA500;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
+
+  .epagomenal-day:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  }
+
+  .epagomenal-day .festive-icon {
+    font-size: 1.5em;
   }
 
   .modal {
@@ -343,6 +395,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    max-height: 80vh;
+    overflow-y: auto;
   }
 
   .close {
@@ -359,51 +413,75 @@
     text-decoration: none;
   }
 
-  #eventForm {
+  #newEventForm {
     display: flex;
     flex-direction: column;
     gap: 16px;
-  }
-
-  #eventForm input, #eventForm textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
+    background-color: var(--surface-color);
+    padding: 20px;
     border-radius: 10px;
-    font-size: 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
 
-  #eventForm button {
+  #newEventForm h3 {
+    margin-bottom: 16px;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-group label {
+    font-weight: 500;
+    color: var(--on-surface-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  #newEventForm input,
+  #newEventForm textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--separator-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--background-color);
+    color: var(--on-surface-color);
+    transition: border-color 0.3s ease;
+  }
+
+  #newEventForm input:focus,
+  #newEventForm textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+
+  #newEventForm button {
     background-color: var(--primary-color);
     color: var(--on-primary-color);
     border: none;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
   }
 
-  #eventForm button:hover {
-    background-color: #303f9f;
-  }
-
-  #deleteEvent {
+  #newEventForm button:hover {
     background-color: var(--secondary-color);
-    color: var(--on-primary-color);
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 12px;
-  }
-
-  #deleteEvent:hover {
-    background-color: #c51162;
   }
 
   .copyright {
@@ -440,6 +518,64 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .option-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .festive-icon {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 1.2em;
+    color: #FFD700;
+  }
+
+  .integration-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .integration-options select,
+  .integration-options textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--separator-color);
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  .feature-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .feature-options label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  #copy-code {
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  #copy-code:hover {
+    background-color: var(--secondary-color);
   }
 
   /* Switch styles */
@@ -543,6 +679,40 @@
     color: var(--on-primary-color);
   }
 
+  .month-slider-container {
+    position: relative;
+  }
+
+  .month-slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .month-slider-arrow:hover {
+    background-color: var(--secondary-color);
+  }
+
+  .month-slider-arrow-left {
+    left: 5px;
+  }
+
+  .month-slider-arrow-right {
+    right: 5px;
+  }
+
   @media (min-width: 768px) {
     .app-container {
       max-width: 1200px;
@@ -587,21 +757,184 @@
       width: 130px;
       height: 55px;
     }
+
+    .bottom-blocks {
+      display: flex;
+      gap: 16px;
+    }
+
+    .days-block, .events-holidays-block {
+      flex: 1;
+    }
   }
 
   /* Nouveau style pour le block d'informations supplémentaires */
   .info-additional {
     background-color: #FFF6E0;
+    position: relative;
+  }
+
+  .close-info-additional {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+  }
+
+  .season-block.clicked {
+    animation: click-pulse 0.3s ease-out;
+  }
+
+  .option-item {
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .event-indicator {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .events-holidays-block {
+    margin-top: 20px;
+  }
+
+  .event-list-item {
+    padding: 10px;
+    border-bottom: 1px solid var(--separator-color);
+  }
+
+  .event-list-item:last-child {
+    border-bottom: none;
+  }
+
+  .event-date {
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+
+  .event-title {
+    font-weight: 500;
+  }
+
+  .event-description {
+    font-size: 0.9em;
+    color: var(--on-surface-color);
+    opacity: 0.8;
+  }
+
+  .see-more-button {
+    background-color: var(--primary-color);
+    color: var(--on-primary-color);
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+
+  .see-more-button:hover {
+    background-color: var(--secondary-color);
+  }
+
+  .event-date .egyptian-date {
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+
+  .event-date .gregorian-date {
+    font-size: 0.8em;
+    color: var(--on-surface-color);
+    opacity: 0.7;
+  }
+
+  .delete-event {
+    background-color: var(--secondary-color);
+    color: var(--on-primary-color);
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-top: 8px;
+  }
+
+  .delete-event:hover {
+    background-color: #c51162;
+  }
+
+  .widget-style-options,
+  .feature-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .widget-style-options label,
+  .feature-options label {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .widget-style-options label:hover,
+  .feature-options label:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  .widget-style-options input,
+  .feature-options input {
+    display: none;
+  }
+
+  .widget-style-options input:checked + i,
+  .feature-options input:checked + i {
+    color: var(--primary-color);
+  }
+
+  #widget-preview {
+    width: 100%;
+    height: 300px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    overflow: hidden;
+  }
+
+  #widget-preview iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 </style>
 </head>
 <body>
-
-    <!-- Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N28VVQ5V"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
-   
   <div class="app-container">
     <div class="top-blocks">
       <div class="date-block card">
@@ -609,9 +942,9 @@
           <div class="logo-container">
             <img src="https://image.noelshack.com/fichiers/2024/30/7/1722202010-africalend-logo.png" alt="Africalend logo" width="180">
           </div>
-          <p class="year" id="current-year">6261</p>
+          <p class="year" id="current-year"><i class="fas fa-calendar-alt"></i> 6261</p>
         </div>
-        <h3 class="seasons-title">Les saisons</h3>
+        <h3 class="seasons-title"><i class="fas fa-sun"></i> Les saisons</h3>
         <div class="seasons-container">
           <div class="season-block akhet">
             <span class="season-name">Akhet</span>
@@ -628,7 +961,7 @@
         </div>
       </div>
       <div class="events-block card">
-        <h2>Les paramètres</h2>
+        <h2><i class="fas fa-cog"></i> Les paramètres</h2>
         <div class="options-container">
           <div class="option-item">
             <span>Mode sombre</span>
@@ -645,12 +978,18 @@
             </label>
           </div>
         </div>
-        <button class="integration-button" id="integration-button">Intégrer dans votre site</button>
+        <button class="integration-button" id="integration-button">
+          <i class="fas fa-code"></i> Intégrer dans votre site
+        </button>
       </div>
     </div>
-    
-    <div class="month-slider" id="month-slider">
-      <!-- Month cards will be dynamically generated here -->
+
+    <div class="month-slider-container">
+      <button class="month-slider-arrow month-slider-arrow-left"><i class="fas fa-chevron-left"></i></button>
+      <div class="month-slider" id="month-slider">
+        <!-- Month cards will be dynamically generated here -->
+      </div>
+      <button class="month-slider-arrow month-slider-arrow-right"><i class="fas fa-chevron-right"></i></button>
     </div>
 
     <div class="current-month-block card">
@@ -658,75 +997,126 @@
     </div>
 
     <div class="card info-additional">
-      <img src="https://image.noelshack.com/fichiers/2024/32/6/1723301425-pub-calend.png" alt="Publicité Calendrier" style="width: 100%; height: auto;">
+      <button class="close-info-additional">&times;</button>
+      <img src="https://image.noelshack.com/fichiers/2024/38/4/1726698692-africalend-pub.png" alt="Publicité Calendrier" style="width: 100%; height: auto;">
     </div>
 
-    <div class="days-block card">
-      <h2>Jours de la semaine</h2>
-      <ul class="days-list">
-        <li class="day-item">
-          <span class="egyptian-day">Thot</span>
-          <span class="gregorian-day">Lundi</span>
-        </li>
-        <li class="day-item">
-          <span class="egyptian-day">Horus</span>
-          <span class="gregorian-day">Mardi</span>
-        </li>
-        <li class="day-item">
-          <span class="egyptian-day">Isis</span>
-          <span class="gregorian-day">Mercredi</span>
-        </li>
-        <li class="day-item">
-          <span class="egyptian-day">Seth</span>
-          <span class="gregorian-day">Jeudi</span>
-        </li>
-        <li class="day-item">
-          <span class="egyptian-day">Nephtys</span>
-          <span class="gregorian-day">Vendredi</span>
-        </li>
-        <li class="day-item">
-          <span class="egyptian-day">Osiris</span>
-          <span class="gregorian-day">Samedi</span>
-        </li>
-        <li class="day-item">
-          <span class="egyptian-day">Ra</span>
-          <span class="gregorian-day">Dimanche</span>
-        </li>
-      </ul>
+    <div class="bottom-blocks">
+      <div class="days-block card">
+        <h2><i class="fas fa-calendar-week"></i> Jours de la semaine</h2>
+        <ul class="days-list">
+          <li class="day-item">
+            <span class="egyptian-day">Thot</span>
+            <span class="gregorian-day">Lundi</span>
+          </li>
+          <li class="day-item">
+            <span class="egyptian-day">Horus</span>
+            <span class="gregorian-day">Mardi</span>
+          </li>
+          <li class="day-item">
+            <span class="egyptian-day">Isis</span>
+            <span class="gregorian-day">Mercredi</span>
+          </li>
+          <li class="day-item">
+            <span class="egyptian-day">Seth</span>
+            <span class="gregorian-day">Jeudi</span>
+          </li>
+          <li class="day-item">
+            <span class="egyptian-day">Nephtys</span>
+            <span class="gregorian-day">Vendredi</span>
+          </li>
+          <li class="day-item">
+            <span class="egyptian-day">Osiris</span>
+            <span class="gregorian-day">Samedi</span>
+          </li>
+          <li class="day-item">
+            <span class="egyptian-day">Ra</span>
+            <span class="gregorian-day">Dimanche</span>
+          </li>
+        </ul>
+      </div>
+      <div class="events-holidays-block card">
+        <h2><i class="fas fa-calendar-alt"></i> Événements et jours fériés</h2>
+        <div id="upcomingEvents"></div>
+        <button id="seeMoreEvents" class="see-more-button">Voir plus d'événements</button>
+      </div>
     </div>
-    
+
     <p class="copyright">© 6248 - 6261 Africalend Tous droits réservés.</p>
   </div>
 
   <div id="eventModal" class="modal" style="display: none;">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <h2 id="modalTitle">Ajouter un événement</h2>
-      <form id="eventForm">
-        <input type="hidden" id="eventDate" name="eventDate">
-        <input type="text" id="eventTitle" name="eventTitle" placeholder="Titre de l'événement" required>
-        <textarea id="eventDescription" name="eventDescription" placeholder="Description de l'événement" rows="3"></textarea>
-        <button type="submit">Enregistrer</button>
+      <h2 id="modalTitle">Événements</h2>
+      <div id="eventList"></div>
+      <form id="newEventForm">
+        <h3><i class="fas fa-plus-circle"></i> Ajouter un nouvel événement</h3>
+        <div class="form-group">
+          <label for="newEventTitle"><i class="fas fa-heading"></i> Titre</label>
+          <input type="text" id="newEventTitle" placeholder="Titre de l'événement" required>
+        </div>
+        <div class="form-group">
+          <label for="newEventDescription"><i class="fas fa-align-left"></i> Description</label>
+          <textarea id="newEventDescription" placeholder="Description de l'événement" rows="3"></textarea>
+        </div>
+        <button type="submit"><i class="fas fa-save"></i> Ajouter l'événement</button>
       </form>
-      <button id="deleteEvent" style="display:none;">Supprimer l'événement</button>
     </div>
   </div>
 
-<script>
+  <div id="integrationModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Intégrer le calendrier</h2>
+      <div class="integration-options">
+        <h3>Type de widget</h3>
+        <select id="widget-type">
+          <option value="full">Calendrier complet</option>
+          <option value="mini">Mini calendrier</option>
+          <option value="events">Liste d'événements</option>
+          <option value="date">Date du jour</option>
+        </select>
+        
+        <h3>Style du widget</h3>
+        <div class="widget-style-options">
+          <label><input type="radio" name="widget-style" value="square" checked> <i class="fas fa-square"></i> Carré</label>
+          <label><input type="radio" name="widget-style" value="rounded"> <i class="fas fa-square-full"></i> Arrondi</label>
+        </div>
+        
+        <h3>Fonctionnalités</h3>
+        <div class="feature-options">
+          <label><input type="checkbox" id="feature-darkmode" checked> <i class="fas fa-moon"></i> Mode sombre</label>
+          <label><input type="checkbox" id="feature-gregorian" checked> <i class="fas fa-calendar-alt"></i> Dates grégoriennes</label>
+          <label><input type="checkbox" id="feature-events" checked> <i class="fas fa-calendar-plus"></i> Ajout d'événements</label>
+          <label><input type="checkbox" id="feature-holidays" checked> <i class="fas fa-gift"></i> Jours fériés</label>
+        </div>
+        
+        <h3>Aperçu</h3>
+        <div id="widget-preview"></div>
+        
+        <h3>Code d'intégration</h3>
+        <textarea id="integration-code" rows="5" readonly></textarea>
+        <button id="copy-code">Copier le code</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
 const monthNames = [
-  { name: "Djehouty", start: new Date(2023, 6, 19), end: new Date(2023, 7, 17), firstDayIndex: 4 },
-  { name: "Phaophi", start: new Date(2023, 7, 18), end: new Date(2023, 8, 16), firstDayIndex: 6 },
-  { name: "Hout Horo", start: new Date(2023, 8, 17), end: new Date(2023, 9, 16), firstDayIndex: 1 },
-  { name: "Khoiak", start: new Date(2023, 9, 17), end: new Date(2023, 10, 15), firstDayIndex: 3 },
-  { name: "Tybi", start: new Date(2023, 10, 16), end: new Date(2023, 11, 15), firstDayIndex: 5 },
-  { name: "Mekhir", start: new Date(2023, 11, 16), end: new Date(2024, 0, 14), firstDayIndex: 0 },
-  { name: "Phamenoth", start: new Date(2024, 0, 15), end: new Date(2024, 1, 13), firstDayIndex: 2 },
-  { name: "Rennoutet", start: new Date(2024, 1, 14), end: new Date(2024, 2, 15), firstDayIndex: 4 },
-  { name: "Pakhon", start: new Date(2024, 2, 16), end: new Date(2024, 3, 14), firstDayIndex: 6 },
-  { name: "Payni", start: new Date(2024, 3, 15), end: new Date(2024, 4, 14), firstDayIndex: 1 },
-  { name: "Epiphi", start: new Date(2024, 4, 15), end: new Date(2024, 5, 13), firstDayIndex: 3 },
-  { name: "Mésori", start: new Date(2024, 5, 14), end: new Date(2024, 6, 13), firstDayIndex: 5 },
-  { name: "Jours Épagomènes", start: new Date(2024, 6, 14), end: new Date(2024, 6, 18), firstDayIndex: 0 }
+  { name: "Djehouty", start: new Date(2024, 6, 19), end: new Date(2024, 7, 17), firstDayIndex: 4 },
+  { name: "Phaophi", start: new Date(2024, 7, 18), end: new Date(2024, 8, 16), firstDayIndex: 6 },
+  { name: "Hout Horo", start: new Date(2024, 8, 17), end: new Date(2024, 9, 16), firstDayIndex: 1 },
+  { name: "Khoiak", start: new Date(2024, 9, 17), end: new Date(2024, 10, 15), firstDayIndex: 3 },
+  { name: "Tybi", start: new Date(2024, 10, 16), end: new Date(2024, 11, 15), firstDayIndex: 5 },
+  { name: "Mekhir", start: new Date(2024, 11, 16), end: new Date(2025, 0, 14), firstDayIndex: 0 },
+  { name: "Phamenoth", start: new Date(2025, 0, 15), end: new Date(2025, 1, 13), firstDayIndex: 2 },
+  { name: "Rennoutet", start: new Date(2025, 1, 14), end: new Date(2025, 2, 15), firstDayIndex: 4 },
+  { name: "Pakhon", start: new Date(2025, 2, 16), end: new Date(2025, 3, 14), firstDayIndex: 6 },
+  { name: "Payni", start: new Date(2025, 3, 15), end: new Date(2025, 4, 14), firstDayIndex: 1 },
+  { name: "Epiphi", start: new Date(2025, 4, 15), end: new Date(2025, 5, 13), firstDayIndex: 3 },
+  { name: "Mésori", start: new Date(2025, 5, 14), end: new Date(2025, 6, 13), firstDayIndex: 5 },
+  { name: "Jours Épagomènes", start: new Date(2025, 6, 14), end: new Date(2025, 6, 18), firstDayIndex: 0 }
 ];
 
 const gregorianMonthNames = [
@@ -739,14 +1129,35 @@ const dayNames = ["Thot", "Horus", "Isis", "Seth", "Nephtys", "Osiris", "Ra"];
 let events = JSON.parse(localStorage.getItem('events')) || {};
 
 const holidays = {
-  '2024-12-26': 'Fête de Kwanzaa'
+  '2024-06-24': 'Journée internationale des droits des noirs',
+  '2024-12-26': 'Fête de Kwanzaa',
+  '2024-12-27': 'Fête de Kwanzaa',
+  '2024-12-28': 'Fête de Kwanzaa',
+  '2024-12-29': 'Fête de Kwanzaa',
+  '2024-12-30': 'Fête de Kwanzaa',
+  '2024-12-31': 'Fête de Kwanzaa',
+  '2025-01-01': 'Fête de Kwanzaa',
+  '2024-05-25': 'Journée de l\'Afrique',
+  '2024-10-01': 'Mois de l\'histoire des Noirs',
+  '2024-10-31': 'Fin du Mois de l\'histoire des Noirs',
 };
 
 let currentYear = 6261;
-let currentMonth = 0;
+let currentMonth = 1; // Set to Phaophi (August-September)
+
+function getCurrentEgyptianMonth() {
+  const today = new Date();
+  for (let i = 0; i < monthNames.length; i++) {
+    if (today >= monthNames[i].start && today <= monthNames[i].end) {
+      return i;
+    }
+  }
+  return 0; // Default to the first month if not found
+}
 
 function getGregorianDate(egyptianYear, egyptianMonth, egyptianDay) {
-  const baseDate = monthNames[egyptianMonth].start;
+  const baseDate = new Date(monthNames[egyptianMonth].start);
+  baseDate.setFullYear(2024);
   const gregorianDate = new Date(baseDate);
   gregorianDate.setDate(baseDate.getDate() + egyptianDay - 1);
   return gregorianDate;
@@ -763,11 +1174,10 @@ function getEgyptianDate(gregorianDate) {
       };
     }
   }
-  // Si on arrive ici, c'est probablement un jour épagomène
   const lastMonth = monthNames[monthNames.length - 1];
   const dayDiff = Math.floor((gregorianDate - lastMonth.end) / (1000 * 60 * 60 * 24));
   return {
-    month: 12, // Représente les jours épagomènes
+    month: 12,
     day: dayDiff + 1,
     dayName: dayNames[(dayDiff + (lastMonth.firstDayIndex + 30) % 7) % 7]
   };
@@ -803,7 +1213,7 @@ function renderMonth(monthIndex, containerClass, withHeaders = true) {
     daysContainer.appendChild(emptyDay);
   }
 
-  const daysInMonth = monthIndex === 12 ? 5 : 30; // 5 jours pour les jours épagomènes, 30 pour les autres mois
+  const daysInMonth = monthIndex === 12 ? 5 : 30;
   for (let i = 1; i <= daysInMonth; i++) {
     const dayElement = document.createElement("div");
     dayElement.className = "day";
@@ -812,12 +1222,28 @@ function renderMonth(monthIndex, containerClass, withHeaders = true) {
     const dateKey = `${currentYear}-${monthIndex}-${i}`;
     const gregorianDateString = `${gregorianDate.getFullYear()}-${(gregorianDate.getMonth() + 1).toString().padStart(2, '0')}-${gregorianDate.getDate().toString().padStart(2, '0')}`;
     
+    let festiveIcon = '';
+    if (monthIndex === 0 && i === 1) {
+      festiveIcon = '<span class="festive-icon">🎉</span>';
+    } else if (holidays[gregorianDateString]) {
+      festiveIcon = '<span class="festive-icon">🎊</span>';
+    }
+
+    // Add special styling for Epagomenal Days
+    if (monthIndex === 12) {
+      dayElement.classList.add('epagomenal-day');
+      festiveIcon = '<span class="festive-icon">🎉🎊</span>';
+    }
+    
+    const eventCount = events[dateKey] ? events[dateKey].length : 0;
+    const eventIndicator = eventCount > 0 ? `<div class="event-indicator">${eventCount}</div>` : '';
+    
     dayElement.innerHTML = `
       <span class="egyptian-date">${i}</span>
       <span class="egyptian-day-name">${egyptianDayName}</span>
-      <span class="gregorian-date">${gregorianDate.getDate()} ${gregorianDate.toLocaleString("default", { month: "short" })}</span>
-      ${events[dateKey] ? '<div class="event-bar"></div>' : ''}
-      ${holidays[gregorianDateString] ? '<div class="holiday-indicator">🎉</div>' : ''}
+      <span class="gregorian-date">${gregorianDate.getDate()} ${gregorianDate.toLocaleString("default", { month: "short" })} ${gregorianDate.getFullYear()}</span>
+      ${eventIndicator}
+      ${festiveIcon}
     `;
     
     dayElement.addEventListener('click', () => openModal(dateKey, gregorianDateString));
@@ -831,25 +1257,168 @@ function renderMonth(monthIndex, containerClass, withHeaders = true) {
 
 function displayCurrentMonth() {
   const calendarContainer = document.querySelector(".current-month-block");
-  calendarContainer.innerHTML = ''; // Clear previous content
+  calendarContainer.innerHTML = '';
   const currentMonthBlock = renderMonth(currentMonth, "current-month-block", true);
   calendarContainer.appendChild(currentMonthBlock);
   updateGregorianDatesVisibility();
 }
 
+function getUpcomingAndPastEvents() {
+  const today = new Date();
+  const upcomingEvents = [];
+
+  const allEvents = { ...holidays, ...events };
+
+  for (const dateKey in allEvents) {
+    const eventDate = new Date(dateKey);
+    const eventInfo = allEvents[dateKey];
+    let eventItem = {
+      date: eventDate,
+      title: Array.isArray(eventInfo) ? eventInfo[0].title : eventInfo,
+      description: Array.isArray(eventInfo) ? eventInfo[0].description : getHolidayDescription(eventInfo)
+    };
+
+    // Special handling for Black History Month
+    if (eventInfo === 'Mois de l\'histoire des Noirs') {
+      eventItem.endDate = new Date('2024-10-31');
+      eventItem.description = 'Le mois de l\'histoire des Noirs est une commémoration annuelle de l\'histoire africaine et de la diaspora.';
+    }
+
+    if (eventDate >= today || (eventItem.endDate && eventItem.endDate >= today)) {
+      upcomingEvents.push(eventItem);
+    }
+  }
+
+  upcomingEvents.sort((a, b) => a.date - b.date);
+
+  return { upcomingEvents };
+}
+
+function updateEventsHolidaysBlock() {
+  const { upcomingEvents } = getUpcomingAndPastEvents();
+  const upcomingEventsContainer = document.getElementById('upcomingEvents');
+
+  upcomingEventsContainer.innerHTML = '';
+
+  function createEventElement(event) {
+    const eventElement = document.createElement('div');
+    eventElement.className = 'event-list-item';
+    const egyptianDate = getEgyptianDate(event.date);
+    const gregorianYear = 2024; 
+    let dateString = `${egyptianDate.day} ${egyptianDate.dayName} ${monthNames[egyptianDate.month].name} ${currentYear}`;
+    
+    if (event.endDate) {
+      const endEgyptianDate = getEgyptianDate(event.endDate);
+      dateString += ` - ${endEgyptianDate.day} ${endEgyptianDate.dayName} ${monthNames[endEgyptianDate.month].name} ${currentYear}`;
+    }
+    
+    eventElement.innerHTML = `
+      <div class="event-date">
+        <span class="egyptian-date">${dateString}</span>
+        <span class="gregorian-date">(${event.date.getDate()}/${event.date.getMonth() + 1}/${gregorianYear}${event.endDate ? ` - ${event.endDate.getDate()}/${event.endDate.getMonth() + 1}/${gregorianYear}` : ''})</span>
+      </div>
+      <div class="event-title">${event.title}</div>
+    `;
+    eventElement.addEventListener('click', () => openEventModal(event));
+    return eventElement;
+  }
+
+  upcomingEvents.slice(0, 3).forEach(event => {
+    upcomingEventsContainer.appendChild(createEventElement(event));
+  });
+
+  document.getElementById('seeMoreEvents').addEventListener('click', openAllEventsModal);
+}
+
+function openAllEventsModal() {
+  const { upcomingEvents } = getUpcomingAndPastEvents();
+  const modal = document.getElementById('eventModal');
+  const modalContent = modal.querySelector('.modal-content');
+  
+  modalContent.innerHTML = `
+    <span class="close">&times;</span>
+    <h2>Tous les événements à venir</h2>
+    <div id="allUpcomingEvents"></div>
+  `;
+  
+  const allUpcomingEventsContainer = document.getElementById('allUpcomingEvents');
+
+  function createEventElement(event) {
+    const eventElement = document.createElement('div');
+    eventElement.className = 'event-list-item';
+    const egyptianDate = getEgyptianDate(event.date);
+    eventElement.innerHTML = `
+      <div class="event-date">
+        <span class="egyptian-date">${egyptianDate.day} ${egyptianDate.dayName} ${monthNames[egyptianDate.month].name} ${currentYear}</span>
+        <span class="gregorian-date">(${event.date.toLocaleDateString()})</span>
+      </div>
+      <div class="event-title">${event.title}</div>
+      <div class="event-description">${event.description}</div>
+    `;
+    return eventElement;
+  }
+
+  upcomingEvents.forEach(event => {
+    allUpcomingEventsContainer.appendChild(createEventElement(event));
+  });
+
+  modal.style.display = 'block';
+
+  const closeButton = modalContent.querySelector('.close');
+  closeButton.onclick = () => {
+    modal.style.display = 'none';
+  };
+
+  window.onclick = (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
+}
+
 function initCalendar() {
+  currentMonth = getCurrentEgyptianMonth();
   displayCurrentMonth();
   renderMonthCards();
   updateCurrentSeason();
+  initMonthNavigation();
+  addDynamicEffects();
+  updateEventsHolidaysBlock();
+  initInfoAdditionalCard();
+}
+
+function initInfoAdditionalCard() {
+  const infoAdditionalCard = document.querySelector('.info-additional');
+  const closeButton = document.querySelector('.close-info-additional');
+  
+  // Check if the card should be hidden
+  const hiddenUntil = localStorage.getItem('infoAdditionalHiddenUntil');
+  if (hiddenUntil && new Date().getTime() < parseInt(hiddenUntil)) {
+    infoAdditionalCard.style.display = 'none';
+  }
+
+  closeButton.addEventListener('click', () => {
+    infoAdditionalCard.style.display = 'none';
+    
+    // Set expiration time to one week from now
+    const expirationTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
+    localStorage.setItem('infoAdditionalHiddenUntil', expirationTime.toString());
+  });
 }
 
 function renderMonthCards() {
   const monthSlider = document.getElementById('month-slider');
-  monthSlider.innerHTML = ''; // Clear previous content
+  monthSlider.innerHTML = '';
+
+  const currentEgyptianMonth = getCurrentEgyptianMonth();
   
   monthNames.forEach((month, index) => {
     const monthCard = document.createElement('div');
     monthCard.className = 'month-card';
+    if (index === currentEgyptianMonth) {
+      monthCard.classList.add('selected');
+      currentMonth = index;
+    }
     
     const egyptianMonth = document.createElement('div');
     egyptianMonth.className = 'egyptian-month';
@@ -857,164 +1426,296 @@ function renderMonthCards() {
     
     const gregorianMonth = document.createElement('div');
     gregorianMonth.className = 'gregorian-month';
-    gregorianMonth.textContent = `${gregorianMonthNames[month.start.getMonth()]} - ${gregorianMonthNames[month.end.getMonth()]}`;
+    gregorianMonth.textContent = `${month.start.toLocaleString('default', { month: 'short' })} - ${month.end.toLocaleString('default', { month: 'short' })}`;
     
     monthCard.appendChild(egyptianMonth);
     monthCard.appendChild(gregorianMonth);
     
-    if (index === currentMonth) {
-      monthCard.classList.add('selected');
-    }
-    monthCard.addEventListener('click', () => selectMonth(index));
+    monthCard.addEventListener('click', () => {
+      currentMonth = index;
+      displayCurrentMonth();
+      updateMonthCardSelection();
+    });
+    
     monthSlider.appendChild(monthCard);
+  });
+  
+  updateMonthCardSelection();
+}
+
+function updateMonthCardSelection() {
+  const monthCards = document.querySelectorAll('.month-card');
+  monthCards.forEach((card, index) => {
+    if (index === currentMonth) {
+      card.classList.add('selected');
+    } else {
+      card.classList.remove('selected');
+    }
   });
 }
 
-function selectMonth(monthIndex) {
-  currentMonth = monthIndex;
-  renderMonthCards();
-  displayCurrentMonth();
-}
-
-// Fonction pour mettre à jour la saison actuelle
 function updateCurrentSeason() {
-  const today = new Date();
+  const currentDate = new Date();
   let currentSeason;
   
-  if (today >= new Date(today.getFullYear(), 6, 19) && today < new Date(today.getFullYear(), 10, 15)) {
+  if (currentDate >= new Date(2024, 6, 19) && currentDate < new Date(2024, 10, 15)) {
     currentSeason = 'akhet';
-  } else if (today >= new Date(today.getFullYear(), 10, 16) && today < new Date(today.getFullYear() + 1, 2, 15)) {
+  } else if (currentDate >= new Date(2024, 10, 16) && currentDate < new Date(2025, 2, 15)) {
     currentSeason = 'peret';
   } else {
     currentSeason = 'chemou';
   }
-
-  const seasonBlocks = document.querySelectorAll('.season-block');
-  seasonBlocks.forEach(block => {
+  
+  document.querySelectorAll('.season-block').forEach(block => {
     block.classList.remove('current');
-    if (block.classList.contains(currentSeason)) {
-      block.classList.add('current');
+  });
+  
+  document.querySelector(`.season-block.${currentSeason}`).classList.add('current');
+}
+
+function openModal(dateKey, gregorianDateString) {
+  const modal = document.getElementById('eventModal');
+  const form = document.getElementById('newEventForm');
+  const modalTitle = document.getElementById('modalTitle');
+  const eventList = document.getElementById('eventList');
+  
+  eventList.innerHTML = '';
+  
+  modalTitle.textContent = 'Événements pour ' + dateKey;
+  
+  if (events[dateKey] && events[dateKey].length > 0) {
+    events[dateKey].forEach((event, index) => {
+      const eventItem = document.createElement('div');
+      eventItem.className = 'event-item';
+      eventItem.innerHTML = `
+        <h3>${event.title}</h3>
+        <p>${event.description}</p>
+        <button class="delete-event" data-index="${index}">Supprimer</button>
+      `;
+      eventList.appendChild(eventItem);
+    });
+  } else if (holidays[gregorianDateString]) {
+    const holiday = holidays[gregorianDateString];
+    const holidayItem = document.createElement('div');
+    holidayItem.className = 'event-item holiday';
+    holidayItem.innerHTML = `
+      <h3>${holiday}</h3>
+      <p>${getHolidayDescription(holiday)}</p>
+    `;
+    eventList.appendChild(holidayItem);
+  }
+  
+  modal.style.display = 'block';
+  
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    const newTitle = document.getElementById('newEventTitle').value;
+    const newDescription = document.getElementById('newEventDescription').value;
+    if (!events[dateKey]) {
+      events[dateKey] = [];
+    }
+    events[dateKey].push({ title: newTitle, description: newDescription });
+    localStorage.setItem('events', JSON.stringify(events));
+    modal.style.display = 'none';
+    displayCurrentMonth();
+    updateEventsHolidaysBlock();
+  };
+  
+  eventList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete-event')) {
+      const index = e.target.dataset.index;
+      events[dateKey].splice(index, 1);
+      if (events[dateKey].length === 0) {
+        delete events[dateKey];
+      }
+      localStorage.setItem('events', JSON.stringify(events));
+      modal.style.display = 'none';
+      displayCurrentMonth();
+      updateEventsHolidaysBlock();
     }
   });
-}
-
-// Modal management
-const modal = document.getElementById("eventModal");
-const span = document.getElementsByClassName("close")[0];
-const eventForm = document.getElementById("eventForm");
-const deleteEventButton = document.getElementById("deleteEvent");
-let currentDate = '';
-let currentGregorianDate = '';
-
-function openModal(date, gregorianDate) {
-  currentDate = date;
-  currentGregorianDate = gregorianDate;
-  modal.style.display = "block";
-  document.getElementById("eventDate").value = date;
   
-  if (events[date]) {
-    document.getElementById("modalTitle").textContent = "Modifier l'événement";
-    document.getElementById("eventTitle").value = events[date].title;
-    document.getElementById("eventDescription").value = events[date].description;
-    deleteEventButton.style.display = "block";
-  } else {
-    document.getElementById("modalTitle").textContent = "Ajouter un événement";
-    document.getElementById("eventTitle").value = "";
-    document.getElementById("eventDescription").value = "";
-    deleteEventButton.style.display = "none";
-  }
+  const closeButton = modal.querySelector('.close');
+  closeButton.onclick = () => {
+    modal.style.display = 'none';
+  };
   
-  if (holidays[gregorianDate]) {
-    const holidayTitle = document.createElement("h3");
-    holidayTitle.textContent = "Jour férié";
-    const holidayDescription = document.createElement("p");
-    holidayDescription.textContent = holidays[gregorianDate];
-    const modalContent = document.querySelector(".modal-content");
-    modalContent.insertBefore(holidayDescription, eventForm);
-    modalContent.insertBefore(holidayTitle, holidayDescription);
+  window.onclick = (event) => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
+}
+
+function getHolidayDescription(holiday) {
+  switch(holiday) {
+    case 'Journée internationale des droits des noirs':
+      return 'Célébrée principalement en Afrique et aux Caraïbes pour reconnaître les contributions et l\'histoire des personnes noires à travers le monde.';
+    case 'Fête de Kwanzaa':
+      return 'Célébrée aux États-Unis et au Canada, Kwanzaa est une fête qui met en avant les valeurs et la culture africaines avec des traditions et des cérémonies familiales.';
+    case 'Carnaval':
+      return 'Bien que d\'origine brésilienne, cette fête est particulièrement significative pour la communauté noire du monde entier, mettant en avant leur culture à travers des défilés et des manifestations artistiques.';
+    case 'Journée de l\'Afrique':
+      return 'Célébrée dans de nombreux pays africains et par les Afro-descendants à travers le monde pour commémorer la fondation de l\'Organisation de l\'unité africaine (OUA) en 1963 et pour célébrer la culture, l\'histoire et les réalisations des peuples africains.';
+    case 'Jours Épagomènes - Fête de fin d\'année':
+      return 'Célébration de fin d\'année durant les cinq derniers jours du calendrier égyptien. C\'est une période festive pour accueillir la nouvelle année à venir.';
+    case 'Mois de l\'histoire des Noirs':
+    case 'Fin du Mois de l\'histoire des Noirs':
+      return 'Le mois de l\'histoire des Noirs est une commémoration annuelle de l\'histoire africaine et de la diaspora.';
+    default:
+      return '';
   }
 }
-
-span.onclick = function() {
-  modal.style.display = "none";
-  removeHolidayInfo();
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-    removeHolidayInfo();
-  }
-}
-
-function removeHolidayInfo() {
-  const holidayTitle = document.querySelector(".modal-content h3");
-  const holidayDescription = document.querySelector(".modal-content p");
-  if (holidayTitle) holidayTitle.remove();
-  if (holidayDescription) holidayDescription.remove();
-}
-
-eventForm.onsubmit = function(e) {
-  e.preventDefault();
-  const title = document.getElementById("eventTitle").value;
-  const description = document.getElementById("eventDescription").value;
-  events[currentDate] = { title, description };
-  localStorage.setItem('events', JSON.stringify(events));
-  modal.style.display = "none";
-  displayCurrentMonth();
-  removeHolidayInfo();
-}
-
-deleteEventButton.onclick = function() {
-  delete events[currentDate];
-  localStorage.setItem('events', JSON.stringify(events));
-  modal.style.display = "none";
-  displayCurrentMonth();
-  removeHolidayInfo();
-}
-
-// Dark mode toggle
-const darkModeToggle = document.getElementById('dark-mode');
-darkModeToggle.addEventListener('change', function() {
-  document.body.classList.toggle('dark-mode');
-  localStorage.setItem('darkMode', this.checked);
-});
-
-// Check for saved dark mode preference
-if (localStorage.getItem('darkMode') === 'true') {
-  darkModeToggle.checked = true;
-  document.body.classList.add('dark-mode');
-}
-
-// Gregorian dates visibility toggle
-const gregorianDatesToggle = document.getElementById('show-gregorian-dates');
-gregorianDatesToggle.addEventListener('change', function() {
-  updateGregorianDatesVisibility();
-  localStorage.setItem('showGregorianDates', this.checked);
-});
 
 function updateGregorianDatesVisibility() {
+  const showGregorianDates = document.getElementById('show-gregorian-dates').checked;
   const gregorianDates = document.querySelectorAll('.gregorian-date');
-  const displayStyle = gregorianDatesToggle.checked ? 'block' : 'none';
-  gregorianDates.forEach(date => date.style.display = displayStyle);
-}
-
-// Check for saved Gregorian dates visibility preference
-if (localStorage.getItem('showGregorianDates') === 'false') {
-  gregorianDatesToggle.checked = false;
-  updateGregorianDatesVisibility();
-}
-
-// Integration button
-const integrationButton = document.getElementById('integration-button');
-integrationButton.addEventListener('click', function() {
-  const integrationCode = `<iframe src="https://calendrier6261.com" width="100%" height="600" frameborder="0"></iframe>`;
-  navigator.clipboard.writeText(integrationCode).then(() => {
-    alert('Code d\'intégration copié dans le presse-papier !');
-  }).catch(err => {
-    console.error('Erreur lors de la copie du code d\'intégration: ', err);
+  gregorianDates.forEach(date => {
+    date.style.display = showGregorianDates ? 'block' : 'none';
   });
+}
+
+document.getElementById('show-gregorian-dates').addEventListener('change', updateGregorianDatesVisibility);
+
+document.getElementById('dark-mode').addEventListener('change', (event) => {
+  if (event.target.checked) {
+    document.body.classList.add('dark-mode');
+  } else {
+    document.body.classList.remove('dark-mode');
+  }
 });
+
+document.getElementById('integration-button').addEventListener('click', openIntegrationModal);
+
+function openIntegrationModal() {
+  const modal = document.getElementById('integrationModal');
+  modal.style.display = 'block';
+
+  const widgetType = modal.querySelector('#widget-type');
+  const widgetStyleOptions = modal.querySelectorAll('input[name="widget-style"]');
+  const widgetPreview = modal.querySelector('#widget-preview');
+  const featureOptions = modal.querySelectorAll('.feature-options input');
+  const integrationCode = modal.querySelector('#integration-code');
+  const copyButton = modal.querySelector('#copy-code');
+
+  function updateIntegrationCode() {
+    const selectedType = widgetType.value;
+    const selectedStyle = document.querySelector('input[name="widget-style"]:checked').value;
+    const selectedFeatures = Array.from(featureOptions)
+      .filter(option => option.checked)
+      .map(option => option.id.replace('feature-', ''));
+    
+    const code = generateIntegrationCode(selectedType, selectedStyle, selectedFeatures);
+    integrationCode.value = code;
+    updateWidgetPreview(code);
+  }
+
+  widgetType.addEventListener('change', updateIntegrationCode);
+  widgetStyleOptions.forEach(option => option.addEventListener('change', updateIntegrationCode));
+  featureOptions.forEach(option => option.addEventListener('change', updateIntegrationCode));
+
+  function updateWidgetPreview(code) {
+    widgetPreview.innerHTML = code;
+  }
+
+  updateIntegrationCode();
+
+  const closeButton = modal.querySelector('.close');
+  closeButton.onclick = () => {
+    modal.style.display = 'none';
+  };
+
+  window.onclick = (event) => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
+
+  copyButton.addEventListener('click', () => {
+    integrationCode.select();
+    document.execCommand('copy');
+    alert('Code d\'intégration copié dans le presse-papiers !');
+  });
+}
+
+function generateIntegrationCode(type, style, features) {
+  const baseUrl = 'https://calendrier6261.com/embed';
+  const params = new URLSearchParams();
+  params.append('type', type);
+  params.append('style', style);
+  features.forEach(feature => params.append(feature, 'true'));
+  
+  const url = `${baseUrl}?${params.toString()}`;
+  
+  let width, height;
+  switch (type) {
+    case 'mini':
+      width = 300;
+      height = 300;
+      break;
+    case 'events':
+      width = 300;
+      height = 400;
+      break;
+    case 'date':
+      width = 200;
+      height = 100;
+      break;
+    default:
+      width = 800;
+      height = 600;
+  }
+  
+  const borderRadius = style === 'rounded' ? 'border-radius: 15px;' : '';
+  
+  return `<iframe src="${url}" width="${width}" height="${height}" frameborder="0" style="${borderRadius}"></iframe>`;
+}
+
+function addDynamicEffects() {
+  document.querySelectorAll('.season-block, .month-card, .day, .event-list-item, .integration-button').forEach(element => {
+    element.addEventListener('click', () => {
+      element.classList.add('clicked');
+      setTimeout(() => element.classList.remove('clicked'), 300);
+    });
+  });
+
+  const logo = document.querySelector('.logo-container img');
+  logo.addEventListener('click', () => {
+    logo.classList.add('clicked');
+    setTimeout(() => logo.classList.remove('clicked'), 300);
+  });
+
+  const yearDisplay = document.getElementById('current-year');
+  yearDisplay.addEventListener('click', () => {
+    yearDisplay.classList.add('clicked');
+    setTimeout(() => yearDisplay.classList.remove('clicked'), 300);
+  });
+}
+
+function initMonthNavigation() {
+  const leftArrow = document.querySelector('.month-slider-arrow-left');
+  const rightArrow = document.querySelector('.month-slider-arrow-right');
+  const monthSlider = document.getElementById('month-slider');
+
+  leftArrow.addEventListener('click', () => {
+    currentMonth = (currentMonth - 1 + monthNames.length) % monthNames.length;
+    updateCalendar();
+  });
+
+  rightArrow.addEventListener('click', () => {
+    currentMonth = (currentMonth + 1) % monthNames.length;
+    updateCalendar();
+  });
+}
+
+function updateCalendar() {
+  displayCurrentMonth();
+  updateMonthCardSelection();
+  document.getElementById('month-slider').scrollTo({
+    left: document.querySelector('.month-card.selected').offsetLeft - 100,
+    behavior: 'smooth'
+  });
+}
 
 initCalendar();
 </script>
