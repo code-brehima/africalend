@@ -1,4 +1,10 @@
-<html><head>
+<html><head><base href="https://africalend.net"><title>Calendrier Africain</title>
+<link rel="icon" type="image/png" href="https://image.noelshack.com/fichiers/2024/30/4/1721871966-favicon-africalend.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#000000">
+<link rel="apple-touch-icon" href="https://image.noelshack.com/fichiers/2024/41/3/1728435671-africalend-icon-512x512.png">
   
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -55,6 +61,9 @@
   <link rel="canonical" href="https://www.africalend.net">
   <link rel="icon" href="https://image.noelshack.com/fichiers/2024/31/5/1722561805-icon.png" type="image/x-icon">
   <meta name="robots" content="index, follow">
+<meta name="theme-color" content="#3f51b5">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="https://image.noelshack.com/fichiers/2024/41/3/1728435671-africalend-icon.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
@@ -768,47 +777,6 @@
     }
   }
 
-  /* Nouveau style pour le block d'informations supplémentaires */
-  .info-additional {
-    background-color: #FFF6E0;
-    position: relative;
-  }
-
-  .close-info-additional {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #333;
-  }
-
-  .season-block.clicked {
-    animation: click-pulse 0.3s ease-out;
-  }
-
-  .option-item {
-    cursor: pointer;
-    padding: 5px;
-  }
-
-  .event-indicator {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    background-color: var(--secondary-color);
-    color: white;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .events-holidays-block {
     margin-top: 20px;
   }
@@ -931,10 +899,6 @@
 </style>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N28VVQ5V"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
   <div class="app-container">
     <div class="top-blocks">
       <div class="date-block card">
@@ -994,11 +958,6 @@
 
     <div class="current-month-block card">
       <!-- Le mois en cours sera généré dynamiquement ici -->
-    </div>
-
-    <div class="card info-additional">
-      <button class="close-info-additional">&times;</button>
-      <img src="https://image.noelshack.com/fichiers/2024/38/4/1726698692-africalend-pub.png" alt="Publicité Calendrier" style="width: 100%; height: auto;">
     </div>
 
     <div class="bottom-blocks">
@@ -1144,6 +1103,57 @@ const holidays = {
 
 let currentYear = 6261;
 let currentMonth = 1; // Set to Phaophi (August-September)
+
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+  const expires = "expires=" + date.toUTCString();
+  document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function(err) {
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+
+function getCookie(name) {
+  const cookieName = name + "=";
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookie.split(';');
+  for(let i = 0; i < cookieArray.length; i++) {
+    let cookie = cookieArray[i];
+    while (cookie.charAt(0) == ' ') {
+      cookie = cookie.substring(1);
+    }
+    if (cookie.indexOf(cookieName) == 0) {
+      return cookie.substring(cookieName.length, cookie.length);
+    }
+  }
+  return "";
+}
+
+function loadPreferences() {
+  const darkMode = getCookie('darkMode');
+  const showGregorianDates = getCookie('showGregorianDates');
+
+  if (darkMode === 'true') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('dark-mode').checked = true;
+  }
+
+  if (showGregorianDates === 'true') {
+    document.getElementById('show-gregorian-dates').checked = true;
+  } else if (showGregorianDates === 'false') {
+    document.getElementById('show-gregorian-dates').checked = false;
+  }
+
+  updateGregorianDatesVisibility();
+}
 
 function getCurrentEgyptianMonth() {
   const today = new Date();
@@ -1381,29 +1391,27 @@ function initCalendar() {
   displayCurrentMonth();
   renderMonthCards();
   updateCurrentSeason();
-  initMonthNavigation();
-  addDynamicEffects();
   updateEventsHolidaysBlock();
-  initInfoAdditionalCard();
+  loadPreferences();
 }
 
-function initInfoAdditionalCard() {
-  const infoAdditionalCard = document.querySelector('.info-additional');
-  const closeButton = document.querySelector('.close-info-additional');
-  
-  // Check if the card should be hidden
-  const hiddenUntil = localStorage.getItem('infoAdditionalHiddenUntil');
-  if (hiddenUntil && new Date().getTime() < parseInt(hiddenUntil)) {
-    infoAdditionalCard.style.display = 'none';
-  }
+function initMonthNavigation() {
+  const leftArrow = document.querySelector('.month-slider-arrow-left');
+  const rightArrow = document.querySelector('.month-slider-arrow-right');
 
-  closeButton.addEventListener('click', () => {
-    infoAdditionalCard.style.display = 'none';
-    
-    // Set expiration time to one week from now
-    const expirationTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
-    localStorage.setItem('infoAdditionalHiddenUntil', expirationTime.toString());
+  leftArrow.addEventListener('click', () => {
+    navigateMonth(-1);
   });
+
+  rightArrow.addEventListener('click', () => {
+    navigateMonth(1);
+  });
+}
+
+function navigateMonth(direction) {
+  currentMonth = (currentMonth + direction + monthNames.length) % monthNames.length;
+  displayCurrentMonth();
+  updateMonthCardSelection();
 }
 
 function renderMonthCards() {
@@ -1552,13 +1560,13 @@ function getHolidayDescription(holiday) {
     case 'Journée internationale des droits des noirs':
       return 'Célébrée principalement en Afrique et aux Caraïbes pour reconnaître les contributions et l\'histoire des personnes noires à travers le monde.';
     case 'Fête de Kwanzaa':
-      return 'Célébrée aux États-Unis et au Canada mais aussi en Afrique sous lenom de fête de récolte, Kwanzaa est une fête qui met en avant les valeurs et la culture africaines avec des traditions et des cérémonies familiales.';
+      return 'Célébrée aux États-Unis et au Canada, Kwanzaa est une fête qui met en avant les valeurs et la culture africaines avec des traditions et des cérémonies familiales.';
     case 'Carnaval':
       return 'Bien que d\'origine brésilienne, cette fête est particulièrement significative pour la communauté noire du monde entier, mettant en avant leur culture à travers des défilés et des manifestations artistiques.';
     case 'Journée de l\'Afrique':
       return 'Célébrée dans de nombreux pays africains et par les Afro-descendants à travers le monde pour commémorer la fondation de l\'Organisation de l\'unité africaine (OUA) en 1963 et pour célébrer la culture, l\'histoire et les réalisations des peuples africains.';
     case 'Jours Épagomènes - Fête de fin d\'année':
-      return 'Célébration de fin d\'année durant les cinq derniers jours du calendrier Africain. C\'est une période festive pour accueillir la nouvelle année à venir.';
+      return 'Célébration de fin d\'année durant les cinq derniers jours du calendrier égyptien. C\'est une période festive pour accueillir la nouvelle année à venir.';
     case 'Mois de l\'histoire des Noirs':
     case 'Fin du Mois de l\'histoire des Noirs':
       return 'Le mois de l\'histoire des Noirs est une commémoration annuelle de l\'histoire africaine et de la diaspora.';
@@ -1575,148 +1583,63 @@ function updateGregorianDatesVisibility() {
   });
 }
 
-document.getElementById('show-gregorian-dates').addEventListener('change', updateGregorianDatesVisibility);
-
 document.getElementById('dark-mode').addEventListener('change', (event) => {
   if (event.target.checked) {
     document.body.classList.add('dark-mode');
+    setCookie('darkMode', 'true', 365);
   } else {
     document.body.classList.remove('dark-mode');
+    setCookie('darkMode', 'false', 365);
   }
 });
 
-document.getElementById('integration-button').addEventListener('click', openIntegrationModal);
-
-function openIntegrationModal() {
-  const modal = document.getElementById('integrationModal');
-  modal.style.display = 'block';
-
-  const widgetType = modal.querySelector('#widget-type');
-  const widgetStyleOptions = modal.querySelectorAll('input[name="widget-style"]');
-  const widgetPreview = modal.querySelector('#widget-preview');
-  const featureOptions = modal.querySelectorAll('.feature-options input');
-  const integrationCode = modal.querySelector('#integration-code');
-  const copyButton = modal.querySelector('#copy-code');
-
-  function updateIntegrationCode() {
-    const selectedType = widgetType.value;
-    const selectedStyle = document.querySelector('input[name="widget-style"]:checked').value;
-    const selectedFeatures = Array.from(featureOptions)
-      .filter(option => option.checked)
-      .map(option => option.id.replace('feature-', ''));
-    
-    const code = generateIntegrationCode(selectedType, selectedStyle, selectedFeatures);
-    integrationCode.value = code;
-    updateWidgetPreview(code);
-  }
-
-  widgetType.addEventListener('change', updateIntegrationCode);
-  widgetStyleOptions.forEach(option => option.addEventListener('change', updateIntegrationCode));
-  featureOptions.forEach(option => option.addEventListener('change', updateIntegrationCode));
-
-  function updateWidgetPreview(code) {
-    widgetPreview.innerHTML = code;
-  }
-
-  updateIntegrationCode();
-
-  const closeButton = modal.querySelector('.close');
-  closeButton.onclick = () => {
-    modal.style.display = 'none';
-  };
-
-  window.onclick = (event) => {
-    if (event.target === modal) {
-      modal.style.display = 'none';
-    }
-  };
-
-  copyButton.addEventListener('click', () => {
-    integrationCode.select();
-    document.execCommand('copy');
-    alert('Code d\'intégration copié dans le presse-papiers !');
-  });
-}
-
-function generateIntegrationCode(type, style, features) {
-  const baseUrl = 'https://africalend.net/';
-  const params = new URLSearchParams();
-  params.append('type', type);
-  params.append('style', style);
-  features.forEach(feature => params.append(feature, 'true'));
-  
-  const url = `${baseUrl}?${params.toString()}`;
-  
-  let width, height;
-  switch (type) {
-    case 'mini':
-      width = 300;
-      height = 300;
-      break;
-    case 'events':
-      width = 300;
-      height = 400;
-      break;
-    case 'date':
-      width = 200;
-      height = 100;
-      break;
-    default:
-      width = 800;
-      height = 600;
-  }
-  
-  const borderRadius = style === 'rounded' ? 'border-radius: 15px;' : '';
-  
-  return `<iframe src="${url}" width="${width}" height="${height}" frameborder="0" style="${borderRadius}"></iframe>`;
-}
-
-function addDynamicEffects() {
-  document.querySelectorAll('.season-block, .month-card, .day, .event-list-item, .integration-button').forEach(element => {
-    element.addEventListener('click', () => {
-      element.classList.add('clicked');
-      setTimeout(() => element.classList.remove('clicked'), 300);
-    });
-  });
-
-  const logo = document.querySelector('.logo-container img');
-  logo.addEventListener('click', () => {
-    logo.classList.add('clicked');
-    setTimeout(() => logo.classList.remove('clicked'), 300);
-  });
-
-  const yearDisplay = document.getElementById('current-year');
-  yearDisplay.addEventListener('click', () => {
-    yearDisplay.classList.add('clicked');
-    setTimeout(() => yearDisplay.classList.remove('clicked'), 300);
-  });
-}
-
-function initMonthNavigation() {
-  const leftArrow = document.querySelector('.month-slider-arrow-left');
-  const rightArrow = document.querySelector('.month-slider-arrow-right');
-  const monthSlider = document.getElementById('month-slider');
-
-  leftArrow.addEventListener('click', () => {
-    currentMonth = (currentMonth - 1 + monthNames.length) % monthNames.length;
-    updateCalendar();
-  });
-
-  rightArrow.addEventListener('click', () => {
-    currentMonth = (currentMonth + 1) % monthNames.length;
-    updateCalendar();
-  });
-}
-
-function updateCalendar() {
-  displayCurrentMonth();
-  updateMonthCardSelection();
-  document.getElementById('month-slider').scrollTo({
-    left: document.querySelector('.month-card.selected').offsetLeft - 100,
-    behavior: 'smooth'
-  });
-}
+document.getElementById('show-gregorian-dates').addEventListener('change', (event) => {
+  updateGregorianDatesVisibility();
+  setCookie('showGregorianDates', event.target.checked, 365);
+});
 
 initCalendar();
-</script>
-</body></html>
+initMonthNavigation();
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(registration => {
+        console.log('Service Worker registered:', registration);
+      })
+      .catch(error => {
+        console.log('Service Worker registration failed:', error);
+      });
+  });
+}
+
+// Add PWA install prompt
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallPrompt();
+});
+
+function showInstallPrompt() {
+  const installButton = document.createElement('button');
+  installButton.textContent = 'Installer l\'application';
+  installButton.classList.add('install-button');
+  installButton.addEventListener('click', () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      deferredPrompt = null;
+    });
+  });
+  document.body.appendChild(installButton);
+}
+  </script>
+</body>
+</html>
