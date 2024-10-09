@@ -1,8 +1,8 @@
 {
   "name": "Africalend",
   "short_name": "Africalend",
-  "description": "Calendrier africain Une continuité de l'ancien calendrier Kamite",
-  "start_url": "https://fricalend.net",
+  "description": "Calendrier africain une continuité de l'ancien calendrier Kamite",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
@@ -47,5 +47,6 @@
     {
       "origin": "https://africalend.net"
     }
-  ]
+  ],
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7"
 }
