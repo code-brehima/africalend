@@ -2,7 +2,7 @@
   "name": "Africalend",
   "short_name": "Africalend",
   "description": "Calendrier africain Une continuité de l'ancien calendrier Kamite",
-  "start_url": "/",
+  "start_url": "https://fricalend.net",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
@@ -28,5 +28,24 @@
   "prefer_related_applications": false,
   "related_applications": [],
   "scope": "/",
-  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7"
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  },
+  "screenshots": [
+    {
+      "src": "https://image.noelshack.com/fichiers/2024/41/3/1728439022-screen-app.png",
+      "sizes": "1280x720",
+      "type": "image/png"
+    },
+    {
+      "src": "https://image.noelshack.com/fichiers/2024/41/3/1728439022-screen-app2.png",
+      "sizes": "1280x720",
+      "type": "image/png"
+    }
+  ],
+  "scope_extensions": [
+    {
+      "origin": "https://africalend.net"
+    }
+  ]
 }
