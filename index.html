@@ -1111,10 +1111,35 @@ function setCookie(name, value, days) {
   document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 
+// Dans votre script principal
+
+// Enregistrement du Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
       console.log('ServiceWorker registration successful with scope: ', registration.scope);
+
+      // Enregistrement de la synchronisation en arrière-plan
+      if ('sync' in registration) {
+        registration.sync.register('sync-calendar');
+      }
+
+      // Enregistrement de la synchronisation périodique
+      if ('periodicSync' in registration) {
+        registration.periodicSync.register('update-calendar', {
+          minInterval: 24 * 60 * 60 * 1000 // Une fois par jour
+        });
+      }
+
+      // Demande de permission pour les notifications push
+      if ('Notification' in window) {
+        Notification.requestPermission().then(function(permission) {
+          if (permission === 'granted') {
+            console.log('Notification permission granted.');
+          }
+        });
+      }
+
     }, function(err) {
       console.log('ServiceWorker registration failed: ', err);
     });
