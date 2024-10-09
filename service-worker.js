@@ -22,7 +22,6 @@ self.addEventListener('fetch', function(event) {
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
-        // Cache hit - return response
         if (response) {
           return response;
         }
@@ -32,9 +31,35 @@ self.addEventListener('fetch', function(event) {
   );
 });
 
+// Background Sync
+self.addEventListener('sync', function(event) {
+  if (event.tag === 'sync-calendar') {
+    event.waitUntil(syncCalendar());
+  }
+});
+
+async function syncCalendar() {
+  // Implémentez ici la logique pour synchroniser le calendrier
+  // Par exemple, envoyer des changements locaux au serveur
+  console.log('Synchronisation du calendrier en arrière-plan');
+}
+
+// Periodic Sync
+self.addEventListener('periodicsync', function(event) {
+  if (event.tag === 'update-calendar') {
+    event.waitUntil(updateCalendar());
+  }
+});
+
+async function updateCalendar() {
+  // Implémentez ici la logique pour mettre à jour périodiquement le calendrier
+  console.log('Mise à jour périodique du calendrier');
+}
+
+// Push Notifications
 self.addEventListener('push', function(event) {
   const options = {
-    body: 'Nouvelle mise à jour du calendrier disponible !',
+    body: event.data.text() || 'Nouvelle mise à jour du calendrier disponible !',
     icon: 'images/icon.png',
     vibrate: [100, 50, 100],
     data: {
