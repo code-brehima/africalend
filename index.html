@@ -1,9 +1,10 @@
-<html><head><base href="https://africalend.net"><title>Calendrier Africain</title>
+<html><head><base href="https://calendrier6261.com"><title>Calendrier Égyptien 6261</title>
 <link rel="icon" type="image/png" href="https://image.noelshack.com/fichiers/2024/30/4/1721871966-favicon-africalend.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#3f51b5">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png">
 <link rel="apple-touch-icon" href="https://image.noelshack.com/fichiers/2024/41/3/1728435671-africalend-icon-512x512.png">
   
   <!-- Google Tag Manager -->
@@ -79,7 +80,7 @@
     --separator-color: #e0e0e0;
     --akhet-color: #a3e7ff;
     --peret-color: #85c58c;
-    --chemou-color: #ffff00;
+    --chemou-color: #FFD700;
   }
 
   .dark-mode {
@@ -122,6 +123,8 @@
     max-width: 100%;
     margin: 0 auto;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
   }
 
   @keyframes fadeIn {
@@ -136,7 +139,7 @@
 
   .card {
     background-color: var(--surface-color);
-    border-radius: 10px;
+    border-radius: 40px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     margin-bottom: 20px;
     padding: 12px;
@@ -152,30 +155,106 @@
   .date-block, .events-block, .days-block {
     display: flex;
     flex-direction: column;
+    border-radius: 23px;
   }
 
   .date-block {
     align-items: flex-start;
   }
 
-  .logo-year-container {
+  .header-block {
+    height: 55px;
+    background-color: var(--surface-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    margin-bottom: 10px;
+    padding: 0 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
-  .logo-container {
+  .theme-toggle {
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--on-surface-color);
+    transition: transform 0.3s ease;
+  }
+
+  .theme-toggle:hover {
+    transform: rotate(180deg);
+  }
+
+  .theme-toggle i {
+    transition: all 0.3s ease;
+  }
+
+  .dark-mode .theme-toggle i.fa-sun {
+    display: none;
+  }
+
+  .dark-mode .theme-toggle i.fa-moon {
+    display: inline-block;
+  }
+
+  .theme-toggle i.fa-sun {
+    display: inline-block;
+    color: #ffd700;
+  }
+
+  .theme-toggle i.fa-moon {
+    display: none;
+    color: #7986cb;
+  }
+
+  .seasons-mini {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    gap: 10px;
   }
 
-  .date-block img {
-    max-width: 180px;
-    height: auto;
-    margin-right: 20px;
+  .season-mini {
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .season-mini:hover {
+    transform: scale(1.05);
+  }
+
+  .season-mini.current {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+    animation: pulse 2s infinite;
+  }
+
+  .season-mini.current {
+    transform: scale(1.05);
+  }
+
+  .current-year {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+
+  .month-header {
+    display: flex;
+    align-items: center;
+    margin-left: 50px;
+    margin-top: 10px;
+  }
+
+  .month-header .year,
+  .month-header .month-name {
+    font-size: x-large;
+  }
+
+  .month-header .year {
+    margin-right: 10px;
   }
 
   .year {
@@ -259,14 +338,58 @@
   }
 
   .event-list-item {
-    cursor: pointer;
-    padding: 10px;
-    border-bottom: 1px solid var(--separator-color);
-    transition: background-color 0.3s ease;
+    position: relative;
+    padding: 15px 15px 15px 20px;
+    margin: 10px 0;
+    border-radius: 8px;
+    background: linear-gradient(to right, 
+      rgba(var(--event-color-rgb), 0.2),
+      rgba(var(--event-color-rgb), 0.05));
+    border-left: 5px solid var(--event-color);
+    transition: transform 0.2s ease;
+  }
+
+  .event-list-item.holiday {
+    --event-color: var(--chemou-color);
+    --event-color-rgb: 255, 215, 0;
+  }
+
+  .event-list-item:not(.holiday) {
+    --event-color: var(--primary-color);
+    --event-color-rgb: 63, 81, 181;
+  }
+
+  .event-date {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .event-date .egyptian-date {
+    font-weight: 600;
+    color: var(--event-color);
+  }
+
+  .event-date .gregorian-date {
+    font-size: 0.85em;
+    opacity: 0.7;
+  }
+
+  .event-title {
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  .event-description {
+    font-size: 0.9em;
+    line-height: 1.4;
+    opacity: 0.8;
   }
 
   .event-list-item:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    transform: translateX(5px);
   }
 
   .event-item.holiday {
@@ -305,7 +428,24 @@
   }
 
   .current-month-block {
-    overflow-x: auto;
+    border-radius: 23px;
+    overflow: hidden;
+  }
+
+  .current-month-block .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    padding: 10px;
+  }
+
+  .current-month-block .day-header {
+    text-align: center;
+    padding: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--on-surface-color);
+    background-color: transparent;
   }
 
   .days {
@@ -322,14 +462,13 @@
 
   .day-header {
     font-weight: 500;
-    background-color: var(--primary-color);
     color: var(--on-primary-color);
-    border-radius: 10px;
+    background-color: transparent;
   }
 
   .day {
     background-color: var(--surface-color);
-    border-radius: 10px;
+    border-radius: 13px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     position: relative;
@@ -500,24 +639,6 @@
     margin-top: 16px;
   }
 
-  .integration-button {
-    background-color: var(--secondary-color);
-    color: var(--on-primary-color);
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 12px;
-    width: 100%;
-  }
-
-  .integration-button:hover {
-    background-color: #c51162;
-  }
-
   .options-container {
     margin-top: 12px;
   }
@@ -633,7 +754,10 @@
     transform: translateX(22px);
   }
 
-  /* Styles pour le slider des mois */
+  .month-slider-container {
+    position: relative;
+  }
+
   .month-slider {
     overflow-x: auto;
     white-space: nowrap;
@@ -688,40 +812,6 @@
     color: var(--on-primary-color);
   }
 
-  .month-slider-container {
-    position: relative;
-  }
-
-  .month-slider-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var(--primary-color);
-    color: var(--on-primary-color);
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-  }
-
-  .month-slider-arrow:hover {
-    background-color: var(--secondary-color);
-  }
-
-  .month-slider-arrow-left {
-    left: 5px;
-  }
-
-  .month-slider-arrow-right {
-    right: 5px;
-  }
-
   @media (min-width: 768px) {
     .app-container {
       max-width: 1200px;
@@ -735,10 +825,6 @@
 
     .date-block, .events-block {
       flex: 1;
-    }
-
-    .date-block img {
-      max-width: 220px;
     }
 
     .year {
@@ -758,10 +844,6 @@
       height: 70px;
     }
 
-    .day .gregorian-date {
-      font-size: 0.7rem;
-    }
-
     .month-card {
       width: 130px;
       height: 55px;
@@ -779,15 +861,6 @@
 
   .events-holidays-block {
     margin-top: 20px;
-  }
-
-  .event-list-item {
-    padding: 10px;
-    border-bottom: 1px solid var(--separator-color);
-  }
-
-  .event-list-item:last-child {
-    border-bottom: none;
   }
 
   .event-date {
@@ -896,108 +969,80 @@
     height: 100%;
     border: none;
   }
+
+  .egyptian-day-name {
+    display: block;
+  }
+
+  .day-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .gregorian-day-name {
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  .day.current-day {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(63, 81, 181, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(63, 81, 181, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(63, 81, 181, 0);
+    }
+  }
+
+  .dark-mode .day.current-day {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+  }
 </style>
 </head>
 <body>
   <div class="app-container">
-    <div class="top-blocks">
-      <div class="date-block card">
-        <div class="logo-year-container">
-          <div class="logo-container">
-            <img src="https://image.noelshack.com/fichiers/2024/30/7/1722202010-africalend-logo.png" alt="Africalend logo" width="180">
-          </div>
-          <p class="year" id="current-year"><i class="fas fa-calendar-alt"></i> 6261</p>
-        </div>
-        <h3 class="seasons-title"><i class="fas fa-sun"></i> Les saisons</h3>
-        <div class="seasons-container">
-          <div class="season-block akhet">
-            <span class="season-name">Akhet</span>
-            <span class="season-meaning">Inondation</span>
-          </div>
-          <div class="season-block peret">
-            <span class="season-name">Peret</span>
-            <span class="season-meaning">Émergence</span>
-          </div>
-          <div class="season-block chemou">
-            <span class="season-name">Chémou</span>
-            <span class="season-meaning">Récolte</span>
-          </div>
-        </div>
+    <div class="header-block card">
+      <div class="current-year">6261</div>
+      <div class="seasons-mini">
+        <div class="season-mini akhet">Akhet</div>
+        <div class="season-mini peret">Peret</div>
+        <div class="season-mini chemou">Chémou</div>
       </div>
-      <div class="events-block card">
-        <h2><i class="fas fa-cog"></i> Les paramètres</h2>
-        <div class="options-container">
-          <div class="option-item">
-            <span>Mode sombre</span>
-            <label class="switch">
-              <input type="checkbox" id="dark-mode">
-              <span class="slider"></span>
-            </label>
-          </div>
-          <div class="option-item">
-            <span>Afficher les dates grégoriennes</span>
-            <label class="switch">
-              <input type="checkbox" id="show-gregorian-dates" checked>
-              <span class="slider"></span>
-            </label>
-          </div>
-        </div>
-        <button class="integration-button" id="integration-button">
-          <i class="fas fa-code"></i> Intégrer dans votre site
-        </button>
+      <div class="theme-toggle">
+        <i class="fas fa-sun"></i>
+        <i class="fas fa-moon"></i>
+      </div>
+    </div>
+    <div class="current-month-block card">
+      <div class="days">
+        <div class="day-header">Thot<br><span class="gregorian-day-name">Lundi</span></div>
+        <div class="day-header">Horus<br><span class="gregorian-day-name">Mardi</span></div>
+        <div class="day-header">Isis<br><span class="gregorian-day-name">Mercredi</span></div>
+        <div class="day-header">Seth<br><span class="gregorian-day-name">Jeudi</span></div>
+        <div class="day-header">Nephtys<br><span class="gregorian-day-name">Vendredi</span></div>
+        <div class="day-header">Osiris<br><span class="gregorian-day-name">Samedi</span></div>
+        <div class="day-header">Ra<br><span class="gregorian-day-name">Dimanche</span></div>
       </div>
     </div>
 
     <div class="month-slider-container">
-      <button class="month-slider-arrow month-slider-arrow-left"><i class="fas fa-chevron-left"></i></button>
-      <div class="month-slider" id="month-slider">
-        <!-- Month cards will be dynamically generated here -->
+      <div class="month-slider">
       </div>
-      <button class="month-slider-arrow month-slider-arrow-right"><i class="fas fa-chevron-right"></i></button>
     </div>
 
-    <div class="current-month-block card">
-      <!-- Le mois en cours sera généré dynamiquement ici -->
-    </div>
-
-    <div class="bottom-blocks">
-      <div class="days-block card">
-        <h2><i class="fas fa-calendar-week"></i> Jours de la semaine</h2>
-        <ul class="days-list">
-          <li class="day-item">
-            <span class="egyptian-day">Thot</span>
-            <span class="gregorian-day">Lundi</span>
-          </li>
-          <li class="day-item">
-            <span class="egyptian-day">Horus</span>
-            <span class="gregorian-day">Mardi</span>
-          </li>
-          <li class="day-item">
-            <span class="egyptian-day">Isis</span>
-            <span class="gregorian-day">Mercredi</span>
-          </li>
-          <li class="day-item">
-            <span class="egyptian-day">Seth</span>
-            <span class="gregorian-day">Jeudi</span>
-          </li>
-          <li class="day-item">
-            <span class="egyptian-day">Nephtys</span>
-            <span class="gregorian-day">Vendredi</span>
-          </li>
-          <li class="day-item">
-            <span class="egyptian-day">Osiris</span>
-            <span class="gregorian-day">Samedi</span>
-          </li>
-          <li class="day-item">
-            <span class="egyptian-day">Ra</span>
-            <span class="gregorian-day">Dimanche</span>
-          </li>
-        </ul>
-      </div>
-      <div class="events-holidays-block card">
-        <h2><i class="fas fa-calendar-alt"></i> Événements et jours fériés</h2>
-        <div id="upcomingEvents"></div>
-        <button id="seeMoreEvents" class="see-more-button">Voir plus d'événements</button>
+    <div class="events-block card">
+      <div id="upcomingEvents">
       </div>
     </div>
 
@@ -1006,14 +1051,14 @@
 
   <div id="eventModal" class="modal" style="display: none;">
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span class="close">×</span>
       <h2 id="modalTitle">Événements</h2>
       <div id="eventList"></div>
       <form id="newEventForm">
         <h3><i class="fas fa-plus-circle"></i> Ajouter un nouvel événement</h3>
         <div class="form-group">
           <label for="newEventTitle"><i class="fas fa-heading"></i> Titre</label>
-          <input type="text" id="newEventTitle" placeholder="Titre de l'événement" required>
+          <input type="text" id="newEventTitle" placeholder="Titre de l'événement" required="">
         </div>
         <div class="form-group">
           <label for="newEventDescription"><i class="fas fa-align-left"></i> Description</label>
@@ -1026,7 +1071,7 @@
 
   <div id="integrationModal" class="modal" style="display: none;">
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span class="close">×</span>
       <h2>Intégrer le calendrier</h2>
       <div class="integration-options">
         <h3>Type de widget</h3>
@@ -1039,23 +1084,23 @@
         
         <h3>Style du widget</h3>
         <div class="widget-style-options">
-          <label><input type="radio" name="widget-style" value="square" checked> <i class="fas fa-square"></i> Carré</label>
+          <label><input type="radio" name="widget-style" value="square" checked=""> <i class="fas fa-square"></i> Carré</label>
           <label><input type="radio" name="widget-style" value="rounded"> <i class="fas fa-square-full"></i> Arrondi</label>
         </div>
         
         <h3>Fonctionnalités</h3>
         <div class="feature-options">
-          <label><input type="checkbox" id="feature-darkmode" checked> <i class="fas fa-moon"></i> Mode sombre</label>
-          <label><input type="checkbox" id="feature-gregorian" checked> <i class="fas fa-calendar-alt"></i> Dates grégoriennes</label>
-          <label><input type="checkbox" id="feature-events" checked> <i class="fas fa-calendar-plus"></i> Ajout d'événements</label>
-          <label><input type="checkbox" id="feature-holidays" checked> <i class="fas fa-gift"></i> Jours fériés</label>
+          <label><input type="checkbox" id="feature-darkmode" checked=""> <i class="fas fa-moon"></i> Mode sombre</label>
+          <label><input type="checkbox" id="feature-gregorian" checked=""> <i class="fas fa-calendar-alt"></i> Dates grégoriennes</label>
+          <label><input type="checkbox" id="feature-events" checked=""> <i class="fas fa-calendar-plus"></i> Ajout d'événements</label>
+          <label><input type="checkbox" id="feature-holidays" checked=""> <i class="fas fa-gift"></i> Jours fériés</label>
         </div>
         
         <h3>Aperçu</h3>
         <div id="widget-preview"></div>
         
         <h3>Code d'intégration</h3>
-        <textarea id="integration-code" rows="5" readonly></textarea>
+        <textarea id="integration-code" rows="5" readonly=""></textarea>
         <button id="copy-code">Copier le code</button>
       </div>
     </div>
@@ -1067,15 +1112,15 @@ const monthNames = [
   { name: "Phaophi", start: new Date(2024, 7, 18), end: new Date(2024, 8, 16), firstDayIndex: 6 },
   { name: "Hout Horo", start: new Date(2024, 8, 17), end: new Date(2024, 9, 16), firstDayIndex: 1 },
   { name: "Khoiak", start: new Date(2024, 9, 17), end: new Date(2024, 10, 15), firstDayIndex: 3 },
-  { name: "Tybi", start: new Date(2024, 10, 16), end: new Date(2024, 11, 15), firstDayIndex: 5 },
-  { name: "Mekhir", start: new Date(2024, 11, 16), end: new Date(2025, 0, 14), firstDayIndex: 0 },
-  { name: "Phamenoth", start: new Date(2025, 0, 15), end: new Date(2025, 1, 13), firstDayIndex: 2 },
-  { name: "Rennoutet", start: new Date(2025, 1, 14), end: new Date(2025, 2, 15), firstDayIndex: 4 },
-  { name: "Pakhon", start: new Date(2025, 2, 16), end: new Date(2025, 3, 14), firstDayIndex: 6 },
-  { name: "Payni", start: new Date(2025, 3, 15), end: new Date(2025, 4, 14), firstDayIndex: 1 },
-  { name: "Epiphi", start: new Date(2025, 4, 15), end: new Date(2025, 5, 13), firstDayIndex: 3 },
-  { name: "Mésori", start: new Date(2025, 5, 14), end: new Date(2025, 6, 13), firstDayIndex: 5 },
-  { name: "Jours Épagomènes", start: new Date(2025, 6, 14), end: new Date(2025, 6, 18), firstDayIndex: 0 }
+  { name: "Tybi", start: new Date(2024, 10, 16), end: new Date(2025, 0, 14), firstDayIndex: 5 },
+  { name: "Mekhir", start: new Date(2025, 0, 15), end: new Date(2025, 1, 13), firstDayIndex: 0 },
+  { name: "Phamenoth", start: new Date(2025, 1, 14), end: new Date(2025, 2, 15), firstDayIndex: 2 },
+  { name: "Rennoutet", start: new Date(2025, 2, 16), end: new Date(2025, 3, 14), firstDayIndex: 4 },
+  { name: "Pakhon", start: new Date(2025, 3, 15), end: new Date(2025, 4, 14), firstDayIndex: 6 },
+  { name: "Payni", start: new Date(2025, 4, 15), end: new Date(2025, 5, 13), firstDayIndex: 1 },
+  { name: "Epiphi", start: new Date(2025, 5, 14), end: new Date(2025, 6, 13), firstDayIndex: 3 }, 
+  { name: "Mésori", start: new Date(2025, 6, 14), end: new Date(2025, 7, 13), firstDayIndex: 5 }, 
+  { name: "Jours Épagomènes", start: new Date(2025, 7, 14), end: new Date(2025, 7, 18), firstDayIndex: 0 } 
 ];
 
 const gregorianMonthNames = [
@@ -1098,11 +1143,11 @@ const holidays = {
   '2025-01-01': 'Fête de Kwanzaa',
   '2024-05-25': 'Journée de l\'Afrique',
   '2024-10-01': 'Mois de l\'histoire des Noirs',
-  '2024-10-31': 'Fin du Mois de l\'histoire des Noirs',
+  '2024-10-31': 'Fin du Mois de l\'histoire des Noires',
 };
 
 let currentYear = 6261;
-let currentMonth = 1; // Set to Phaophi (August-September)
+let currentMonth = 3;
 
 function setCookie(name, value, days) {
   const date = new Date();
@@ -1168,30 +1213,11 @@ function getCookie(name) {
 
 function loadPreferences() {
   const darkMode = getCookie('darkMode');
-  const showGregorianDates = getCookie('showGregorianDates');
-
-  if (darkMode === 'true') {
-    document.body.classList.add('dark-mode');
-    document.getElementById('dark-mode').checked = true;
-  }
-
-  if (showGregorianDates === 'true') {
-    document.getElementById('show-gregorian-dates').checked = true;
-  } else if (showGregorianDates === 'false') {
-    document.getElementById('show-gregorian-dates').checked = false;
-  }
-
-  updateGregorianDatesVisibility();
 }
 
 function getCurrentEgyptianMonth() {
   const today = new Date();
-  for (let i = 0; i < monthNames.length; i++) {
-    if (today >= monthNames[i].start && today <= monthNames[i].end) {
-      return i;
-    }
-  }
-  return 0; // Default to the first month if not found
+  return 3; // This sets Khoiak as the current month
 }
 
 function getGregorianDate(egyptianYear, egyptianMonth, egyptianDay) {
@@ -1222,54 +1248,49 @@ function getEgyptianDate(gregorianDate) {
   };
 }
 
-function renderMonth(monthIndex, containerClass, withHeaders = true) {
-  const month = monthNames[monthIndex];
-  const monthBlock = document.createElement("div");
-  monthBlock.className = containerClass ? containerClass : "month-block card";
-  const monthHeader = `
-    <div class="month-header">
-      <h3 class="month-name">${month.name}</h3>
-    </div>
-  `;
-  monthBlock.innerHTML = monthHeader;
-
+function displayCurrentMonth() {
+  const calendarContainer = document.querySelector(".current-month-block");
+  calendarContainer.innerHTML = '';
+  
   const daysContainer = document.createElement("div");
   daysContainer.className = "days";
-
-  if (withHeaders) {
-    dayNames.forEach(day => {
-      const dayHeader = document.createElement("div");
-      dayHeader.className = "day-header";
-      dayHeader.textContent = day[0];
-      daysContainer.appendChild(dayHeader);
-    });
-  }
-
+  
+  const gregorianDayNames = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+  dayNames.forEach((day, index) => {
+    const dayHeader = document.createElement("div");
+    dayHeader.className = "day-header";
+    dayHeader.innerHTML = `
+      ${day}<br>
+      <span class="gregorian-day-name">${gregorianDayNames[index]}</span>
+    `;
+    daysContainer.appendChild(dayHeader);
+  });
+  
+  const month = monthNames[currentMonth];
   const firstDayIndex = month.firstDayIndex;
+  const daysInMonth = currentMonth === 12 ? 5 : 30;
+  
   for (let i = 0; i < firstDayIndex; i++) {
     const emptyDay = document.createElement("div");
     emptyDay.className = "day";
     daysContainer.appendChild(emptyDay);
   }
-
-  const daysInMonth = monthIndex === 12 ? 5 : 30;
+  
   for (let i = 1; i <= daysInMonth; i++) {
     const dayElement = document.createElement("div");
     dayElement.className = "day";
-    const gregorianDate = getGregorianDate(currentYear, monthIndex, i);
-    const egyptianDayName = dayNames[(i - 1 + firstDayIndex) % 7];
-    const dateKey = `${currentYear}-${monthIndex}-${i}`;
+    const gregorianDate = getGregorianDate(currentYear, currentMonth, i);
+    const dateKey = `${currentYear}-${currentMonth}-${i}`;
     const gregorianDateString = `${gregorianDate.getFullYear()}-${(gregorianDate.getMonth() + 1).toString().padStart(2, '0')}-${gregorianDate.getDate().toString().padStart(2, '0')}`;
     
     let festiveIcon = '';
-    if (monthIndex === 0 && i === 1) {
+    if (currentMonth === 0 && i === 1) {
       festiveIcon = '<span class="festive-icon">🎉</span>';
     } else if (holidays[gregorianDateString]) {
       festiveIcon = '<span class="festive-icon">🎊</span>';
     }
 
-    // Add special styling for Epagomenal Days
-    if (monthIndex === 12) {
+    if (currentMonth === 12) {
       dayElement.classList.add('epagomenal-day');
       festiveIcon = '<span class="festive-icon">🎉🎊</span>';
     }
@@ -1279,182 +1300,145 @@ function renderMonth(monthIndex, containerClass, withHeaders = true) {
     
     dayElement.innerHTML = `
       <span class="egyptian-date">${i}</span>
-      <span class="egyptian-day-name">${egyptianDayName}</span>
-      <span class="gregorian-date">${gregorianDate.getDate()} ${gregorianDate.toLocaleString("default", { month: "short" })} ${gregorianDate.getFullYear()}</span>
+      <span class="gregorian-date">${gregorianDate.getDate()}</span>
       ${eventIndicator}
       ${festiveIcon}
     `;
+    
+    const today = new Date();
+    const isToday = gregorianDate.getDate() === today.getDate() && 
+                    gregorianDate.getMonth() === today.getMonth() && 
+                    gregorianDate.getFullYear() === today.getFullYear();
+    
+    if (isToday) {
+      dayElement.classList.add('current-day');
+    }
     
     dayElement.addEventListener('click', () => openModal(dateKey, gregorianDateString));
     
     daysContainer.appendChild(dayElement);
   }
 
-  monthBlock.appendChild(daysContainer);
-  return monthBlock;
+  calendarContainer.appendChild(daysContainer);
+  
+  const appContainer = document.querySelector(".app-container");
+  const headerBlock = document.querySelector(".header-block");
+  appContainer.insertBefore(calendarContainer, headerBlock.nextSibling);
 }
 
-function displayCurrentMonth() {
-  const calendarContainer = document.querySelector(".current-month-block");
-  calendarContainer.innerHTML = '';
-  const currentMonthBlock = renderMonth(currentMonth, "current-month-block", true);
-  calendarContainer.appendChild(currentMonthBlock);
-  updateGregorianDatesVisibility();
+function initCalendar() {
+  currentMonth = getCurrentEgyptianMonth(); // This will now return 3 for Khoiak
+  displayCurrentMonth();
+  renderMonthCards(); // This will render with Khoiak selected
+  updateCurrentSeason();
+  updateEventsHolidaysBlock(); 
+  loadPreferences();
+  updateCurrentDayIndicator(); // Ajout de cette ligne
 }
 
-function getUpcomingAndPastEvents() {
+function updateCurrentDayIndicator() {
+  const today = new Date();
+  const allDays = document.querySelectorAll('.day');
+  
+  allDays.forEach(day => {
+    const gregorianDate = day.querySelector('.gregorian-date');
+    if (gregorianDate) {
+      const dayNum = parseInt(gregorianDate.textContent);
+      if (dayNum === today.getDate()) {
+        day.classList.add('current-day');
+      } else {
+        day.classList.remove('current-day');
+      }
+    }
+  });
+}
+
+// Mettre à jour toutes les minutes
+setInterval(updateCurrentDayIndicator, 60000);
+
+function updateEventsHolidaysBlock() {
+  const upcomingEventsContainer = document.getElementById('upcomingEvents');
+  
+  if (!upcomingEventsContainer) {
+    return;
+  }
+
+  upcomingEventsContainer.innerHTML = `
+    <h2><i class="fas fa-calendar"></i> Événements à venir</h2>
+  `;
+  
   const today = new Date();
   const upcomingEvents = [];
 
-  const allEvents = { ...holidays, ...events };
+  // Look ahead 90 days for events and holidays
+  for (let i = 0; i < 90; i++) {
+    const currentDate = new Date(today);
+    currentDate.setDate(today.getDate() + i);
+    const egyptianDate = getEgyptianDate(currentDate);
+    const dateKey = `${currentYear}-${egyptianDate.month}-${egyptianDate.day}`;
+    const gregorianDateString = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
 
-  for (const dateKey in allEvents) {
-    const eventDate = new Date(dateKey);
-    const eventInfo = allEvents[dateKey];
-    let eventItem = {
-      date: eventDate,
-      title: Array.isArray(eventInfo) ? eventInfo[0].title : eventInfo,
-      description: Array.isArray(eventInfo) ? eventInfo[0].description : getHolidayDescription(eventInfo)
-    };
-
-    // Special handling for Black History Month
-    if (eventInfo === 'Mois de l\'histoire des Noirs') {
-      eventItem.endDate = new Date('2024-10-31');
-      eventItem.description = 'Le mois de l\'histoire des Noirs est une commémoration annuelle de l\'histoire africaine et de la diaspora.';
+    // Add user events
+    if (events[dateKey]) {
+      events[dateKey].forEach(event => {
+        upcomingEvents.push({
+          date: currentDate,
+          egyptianDate: egyptianDate,
+          title: event.title,
+          description: event.description,
+          isHoliday: false
+        });
+      });
     }
 
-    if (eventDate >= today || (eventItem.endDate && eventItem.endDate >= today)) {
-      upcomingEvents.push(eventItem);
+    // Add holidays
+    if (holidays[gregorianDateString]) {
+      upcomingEvents.push({
+        date: currentDate,
+        egyptianDate: egyptianDate,
+        title: holidays[gregorianDateString],
+        description: getHolidayDescription(holidays[gregorianDateString]),
+        isHoliday: true
+      });
     }
   }
 
   upcomingEvents.sort((a, b) => a.date - b.date);
 
-  return { upcomingEvents };
-}
-
-function updateEventsHolidaysBlock() {
-  const { upcomingEvents } = getUpcomingAndPastEvents();
-  const upcomingEventsContainer = document.getElementById('upcomingEvents');
-
-  upcomingEventsContainer.innerHTML = '';
-
-  function createEventElement(event) {
-    const eventElement = document.createElement('div');
-    eventElement.className = 'event-list-item';
-    const egyptianDate = getEgyptianDate(event.date);
-    const gregorianYear = 2024; 
-    let dateString = `${egyptianDate.day} ${egyptianDate.dayName} ${monthNames[egyptianDate.month].name} ${currentYear}`;
-    
-    if (event.endDate) {
-      const endEgyptianDate = getEgyptianDate(event.endDate);
-      dateString += ` - ${endEgyptianDate.day} ${endEgyptianDate.dayName} ${monthNames[endEgyptianDate.month].name} ${currentYear}`;
-    }
-    
-    eventElement.innerHTML = `
-      <div class="event-date">
-        <span class="egyptian-date">${dateString}</span>
-        <span class="gregorian-date">(${event.date.getDate()}/${event.date.getMonth() + 1}/${gregorianYear}${event.endDate ? ` - ${event.endDate.getDate()}/${event.endDate.getMonth() + 1}/${gregorianYear}` : ''})</span>
+  if (upcomingEvents.length === 0) {
+    upcomingEventsContainer.innerHTML += `
+      <div class="event-list-item">
+        <div class="event-title">Aucun événement à venir</div>
       </div>
-      <div class="event-title">${event.title}</div>
     `;
-    eventElement.addEventListener('click', () => openEventModal(event));
-    return eventElement;
+    return;
   }
 
-  upcomingEvents.slice(0, 3).forEach(event => {
-    upcomingEventsContainer.appendChild(createEventElement(event));
-  });
-
-  document.getElementById('seeMoreEvents').addEventListener('click', openAllEventsModal);
-}
-
-function openAllEventsModal() {
-  const { upcomingEvents } = getUpcomingAndPastEvents();
-  const modal = document.getElementById('eventModal');
-  const modalContent = modal.querySelector('.modal-content');
-  
-  modalContent.innerHTML = `
-    <span class="close">&times;</span>
-    <h2>Tous les événements à venir</h2>
-    <div id="allUpcomingEvents"></div>
-  `;
-  
-  const allUpcomingEventsContainer = document.getElementById('allUpcomingEvents');
-
-  function createEventElement(event) {
+  // Create elements for each event
+  upcomingEvents.forEach(event => {
     const eventElement = document.createElement('div');
-    eventElement.className = 'event-list-item';
-    const egyptianDate = getEgyptianDate(event.date);
+    eventElement.className = `event-list-item${event.isHoliday ? ' holiday' : ''}`;
     eventElement.innerHTML = `
       <div class="event-date">
-        <span class="egyptian-date">${egyptianDate.day} ${egyptianDate.dayName} ${monthNames[egyptianDate.month].name} ${currentYear}</span>
-        <span class="gregorian-date">(${event.date.toLocaleDateString()})</span>
+        <span class="egyptian-date">${monthNames[event.egyptianDate.month].name} ${event.egyptianDate.day}</span>
+        <span class="gregorian-date">${event.date.toLocaleDateString()}</span>
       </div>
       <div class="event-title">${event.title}</div>
       <div class="event-description">${event.description}</div>
     `;
-    return eventElement;
-  }
-
-  upcomingEvents.forEach(event => {
-    allUpcomingEventsContainer.appendChild(createEventElement(event));
+    upcomingEventsContainer.appendChild(eventElement);
   });
-
-  modal.style.display = 'block';
-
-  const closeButton = modalContent.querySelector('.close');
-  closeButton.onclick = () => {
-    modal.style.display = 'none';
-  };
-
-  window.onclick = (e) => {
-    if (e.target === modal) {
-      modal.style.display = 'none';
-    }
-  };
-}
-
-function initCalendar() {
-  currentMonth = getCurrentEgyptianMonth();
-  displayCurrentMonth();
-  renderMonthCards();
-  updateCurrentSeason();
-  updateEventsHolidaysBlock();
-  loadPreferences();
-}
-
-function initMonthNavigation() {
-  const leftArrow = document.querySelector('.month-slider-arrow-left');
-  const rightArrow = document.querySelector('.month-slider-arrow-right');
-
-  leftArrow.addEventListener('click', () => {
-    navigateMonth(-1);
-  });
-
-  rightArrow.addEventListener('click', () => {
-    navigateMonth(1);
-  });
-}
-
-function navigateMonth(direction) {
-  currentMonth = (currentMonth + direction + monthNames.length) % monthNames.length;
-  displayCurrentMonth();
-  updateMonthCardSelection();
 }
 
 function renderMonthCards() {
-  const monthSlider = document.getElementById('month-slider');
+  const monthSlider = document.querySelector('.month-slider');
   monthSlider.innerHTML = '';
 
-  const currentEgyptianMonth = getCurrentEgyptianMonth();
-  
   monthNames.forEach((month, index) => {
     const monthCard = document.createElement('div');
     monthCard.className = 'month-card';
-    if (index === currentEgyptianMonth) {
+    if (index === currentMonth) {
       monthCard.classList.add('selected');
-      currentMonth = index;
     }
     
     const egyptianMonth = document.createElement('div');
@@ -1471,7 +1455,6 @@ function renderMonthCards() {
     monthCard.addEventListener('click', () => {
       currentMonth = index;
       displayCurrentMonth();
-      updateMonthCardSelection();
     });
     
     monthSlider.appendChild(monthCard);
@@ -1495,6 +1478,7 @@ function updateCurrentSeason() {
   const currentDate = new Date();
   let currentSeason;
   
+  // Définir la saison en cours basée sur la date
   if (currentDate >= new Date(2024, 6, 19) && currentDate < new Date(2024, 10, 15)) {
     currentSeason = 'akhet';
   } else if (currentDate >= new Date(2024, 10, 16) && currentDate < new Date(2025, 2, 15)) {
@@ -1503,11 +1487,14 @@ function updateCurrentSeason() {
     currentSeason = 'chemou';
   }
   
-  document.querySelectorAll('.season-block').forEach(block => {
-    block.classList.remove('current');
+  // Mettre à jour l'affichage des saisons dans le header
+  const seasonsMini = document.querySelectorAll('.season-mini');
+  seasonsMini.forEach(season => {
+    season.classList.remove('current');
+    if (season.classList.contains(currentSeason)) {
+      season.classList.add('current');
+    }
   });
-  
-  document.querySelector(`.season-block.${currentSeason}`).classList.add('current');
 }
 
 function openModal(dateKey, gregorianDateString) {
@@ -1604,33 +1591,18 @@ function getHolidayDescription(holiday) {
   }
 }
 
-function updateGregorianDatesVisibility() {
-  const showGregorianDates = document.getElementById('show-gregorian-dates').checked;
-  const gregorianDates = document.querySelectorAll('.gregorian-date');
-  gregorianDates.forEach(date => {
-    date.style.display = showGregorianDates ? 'block' : 'none';
-  });
-}
-
-document.getElementById('dark-mode').addEventListener('change', (event) => {
-  if (event.target.checked) {
-    document.body.classList.add('dark-mode');
-    setCookie('darkMode', 'true', 365);
-  } else {
-    document.body.classList.remove('dark-mode');
-    setCookie('darkMode', 'false', 365);
-  }
-});
-
-document.getElementById('show-gregorian-dates').addEventListener('change', (event) => {
-  updateGregorianDatesVisibility();
-  setCookie('showGregorianDates', event.target.checked, 365);
+document.querySelector('.theme-toggle').addEventListener('click', () => {
+  const isDarkMode = document.body.classList.toggle('dark-mode');
+  setCookie('darkMode', isDarkMode, 365);
+  
+  const themeToggle = document.querySelector('.theme-toggle');
+  themeToggle.style.animation = 'none';
+  themeToggle.offsetHeight; 
+  themeToggle.style.animation = 'click-pulse 0.3s ease';
 });
 
 initCalendar();
-initMonthNavigation();
 
-// Register service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/service-worker.js')
@@ -1643,7 +1615,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Add PWA install prompt
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -1670,5 +1641,5 @@ function showInstallPrompt() {
   document.body.appendChild(installButton);
 }
   </script>
-</body>
-</html>
+
+</body></html>
